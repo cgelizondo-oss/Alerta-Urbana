@@ -50,3 +50,11 @@ La misma lógica se aplica a las publicaciones de mascotas perdidas mediante la 
 El siguiente diagrama representa las tablas, claves primarias, claves foráneas y relaciones principales de la base de datos.
 
 ![Diagrama Entidad-Relación](database/diagrama-erd-alert.png)
+
+usuario prueba
+
+Correo: cesar4@prueba.com
+Contraseña: Prueba123
+
+Correo: frontend@prueba.com
+Contraseña: Frontend123

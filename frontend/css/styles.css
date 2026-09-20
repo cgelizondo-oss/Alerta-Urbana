@@ -1,0 +1,346 @@
+/* =========================
+   CONFIGURACIÓN GENERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f3f5f7;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+
+.registro-container {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+
+
+/* =========================
+   TARJETA
+========================= */
+
+.registro-card {
+    width: 100%;
+    max-width: 1050px;
+    min-height: 650px;
+
+    display: flex;
+
+    background-color: #ffffff;
+
+    border-radius: 14px;
+    overflow: hidden;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   PANEL IZQUIERDO
+========================= */
+
+.panel-logo {
+    width: 45%;
+
+    background: linear-gradient(
+        145deg,
+        #f5f8fc,
+        #e8eef6
+    );
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 50px;
+
+    text-align: center;
+
+    border-right: 1px solid #d9dee5;
+}
+
+
+/* LOGO */
+
+.logo-alerta {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+
+    object-fit: contain;
+
+    margin-bottom: 25px;
+}
+
+
+/* TEXTO DEBAJO DEL LOGO */
+
+.panel-logo p {
+    color: #173d73;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   PANEL DERECHO
+========================= */
+
+.panel-formulario {
+    width: 55%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 45px 65px;
+}
+
+
+/* =========================
+   ENCABEZADO
+========================= */
+
+.registro-header {
+    text-align: center;
+
+    margin-bottom: 28px;
+}
+
+.registro-header h1 {
+    color: #0d376d;
+
+    font-size: 30px;
+
+    margin-bottom: 8px;
+}
+
+.registro-header p {
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   CAMPOS
+========================= */
+
+.campo {
+    margin-bottom: 15px;
+}
+
+.campo label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #222;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.campo input {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #cfd5dc;
+    border-radius: 7px;
+
+    background-color: #ffffff;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: border-color 0.2s,
+                box-shadow 0.2s;
+}
+
+
+/* CUANDO SE SELECCIONA UN INPUT */
+
+.campo input:focus {
+    border-color: #145da0;
+
+    box-shadow: 0 0 0 3px rgba(20, 93, 160, 0.12);
+}
+
+
+/* PLACEHOLDER */
+
+.campo input::placeholder {
+    color: #9ca3af;
+}
+
+
+/* =========================
+   AYUDA CONTRASEÑA
+========================= */
+
+.ayuda-password {
+    color: #6b7280;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    margin-top: -5px;
+    margin-bottom: 15px;
+}
+
+
+/* =========================
+   MENSAJES
+========================= */
+
+#mensaje {
+    text-align: center;
+
+    font-size: 13px;
+
+    margin-bottom: 12px;
+}
+
+.mensaje-error {
+    color: #c62828;
+}
+
+.mensaje-exito {
+    color: #2e7d32;
+}
+
+
+/* =========================
+   BOTÓN
+========================= */
+
+.btn-registro {
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+    border-radius: 7px;
+
+    background-color: #0d376d;
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s,
+                transform 0.1s;
+}
+
+.btn-registro:hover {
+    background-color: #145da0;
+}
+
+.btn-registro:active {
+    transform: scale(0.99);
+}
+
+
+/* =========================
+   PIE DEL FORMULARIO
+========================= */
+
+.registro-footer {
+    text-align: center;
+
+    margin-top: 22px;
+
+    font-size: 14px;
+
+    color: #666;
+}
+
+.registro-footer a {
+    color: #0d376d;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+.registro-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+
+    .registro-container {
+        padding: 15px;
+    }
+
+    .registro-card {
+        flex-direction: column;
+
+        max-width: 500px;
+    }
+
+    .panel-logo {
+        width: 100%;
+
+        padding: 30px;
+    }
+
+    .logo-alerta {
+        max-width: 220px;
+    }
+
+    .panel-logo p {
+        font-size: 14px;
+    }
+
+    .panel-formulario {
+        width: 100%;
+
+        padding: 35px 30px;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .panel-formulario {
+        padding: 30px 20px;
+    }
+
+    .registro-header h1 {
+        font-size: 25px;
+    }
+
+    .logo-alerta {
+        max-width: 180px;
+    }
+}
