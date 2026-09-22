@@ -59,6 +59,7 @@ formLogin.addEventListener("submit", async (event) => {
             datos.mensaje || "Inicio de sesión correcto";
 
         mensaje.className = "mensaje-exito";
+        window.location.href = "inicio.html";
 
     } catch (error) {
 

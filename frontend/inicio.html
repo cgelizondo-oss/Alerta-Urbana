@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inicio | Alerta Urbana</title>
+
+    <link rel="stylesheet" href="css/inicio.css">
+    <script src="js/inicio.js" defer></script>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- MENÚ LATERAL -->
+        <aside class="sidebar">
+
+
+            <!-- Botón para abrir y cerrar el menú en celulares -->
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación"
+                aria-expanded="false" aria-controls="menuMobile">
+                ☰
+            </button>
+
+            <div class="sidebar-logo">
+                <a href="inicio.html" class="sidebar-logo" aria-label="Ir al inicio de Alerta Urbana">
+
+                    <img src="assets/logo-alerta-urbana.png" alt="">
+
+                    <span>ALERTA<br>URBANA</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav" id="menuMobile" aria-label="Menú principal">
+
+
+
+                <a href="inicio.html" class="nav-link active" aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">🏠</span>
+                    <span>Inicio</span>
+                </a>
+
+                <a href="login.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">➕</span>
+                    <span>Crear reporte</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🗺️</span>
+                    <span>Ver mapa</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🐾</span>
+                    <span>Mascotas perdidas</span>
+                </a>
+
+                <a href="login.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">🔔</span>
+                    <span>Notificaciones</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="#" class="nav-link">Configuración</a>
+                <a href="#" class="nav-link">Ayuda</a>
+            </div>
+
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+
+            <!-- ENCABEZADO -->
+            <header class="topbar">
+                <h1>Inicio</h1>
+
+                <!-- Opciones para visitantes -->
+                <div class="auth-actions" id="accionesVisitante">
+                    <a href="registro.html" class="btn-register">
+                        Registrarse
+                    </a>
+
+                    <a href="login.html" class="btn-login" id="btnIniciarSesion">
+                        Iniciar sesión
+                    </a>
+                </div>
+                <!-- Se muestra si HAY sesión -->
+                <div class="user-profile" id="perfilUsuario" hidden>
+                    <div class="user-avatar" aria-hidden="true"></div>
+
+                    <span id="nombreUsuario">Usuario</span>
+
+                    <button type="button" class="btn-logout" id="btnCerrarSesion">
+                        Cerrar sesión
+                    </button>
+                </div>
+            </header>
+
+            <!-- BIENVENIDA -->
+
+            <!-- BIENVENIDA -->
+            <section class="welcome-section">
+
+                <div class="welcome-illustration" aria-hidden="true">
+                    <span class="welcome-illustration-icon">🏙️</span>
+                </div>
+
+                <div class="welcome-text">
+                    <h2 id="tituloBienvenida">¡Bienvenido a Alerta Urbana!</h2>
+
+                    <p id="textoBienvenida">
+                        Explorá los reportes de tu ciudad.
+                        Para crear uno, iniciá sesión.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- ESTADÍSTICAS PÚBLICAS -->
+            <section class="stats-grid" aria-label="Estadísticas de reportes">
+
+                <article class="stat-card">
+                    <h3>Total reportes</h3>
+                    <p id="totalReportes">—</p>
+                </article>
+
+                <article class="stat-card">
+                    <h3>Pendientes</h3>
+                    <p id="reportesPendientes">—</p>
+                </article>
+
+                <article class="stat-card">
+                    <h3>Resueltos</h3>
+                    <p id="reportesResueltos">—</p>
+                </article>
+
+            </section>
+
+            <!-- ACCESOS RÁPIDOS -->
+            <section class="quick-actions" aria-label="Accesos rápidos">
+
+                <a href="login.html" class="action-card" data-requiere-sesion>
+                    <span class="action-icon" aria-hidden="true">📋</span>
+                    <span>Mis reportes</span>
+                </a>
+
+                <a href="login.html" class="action-card" data-requiere-sesion>
+                    <span class="action-icon" aria-hidden="true">➕</span>
+                    <span>Crear reporte</span>
+                </a>
+
+                <a href="#" class="action-card">
+                    <span class="action-icon" aria-hidden="true">🗺️</span>
+                    <span>Ver mapa</span>
+                </a>
+
+                <a href="#" class="action-card">
+                    <span class="action-icon" aria-hidden="true">🐾</span>
+                    <span>Mascotas perdidas</span>
+                </a>
+
+            </section>
+
+            <!-- SECCIÓN PRIVADA: SOLO PARA USUARIOS CON SESIÓN -->
+            <div id="contenidoPrivado">
+
+                <section class="content-card">
+                    <h2>Mis reportes recientes</h2>
+
+                    <div id="listaReportes">
+                        <p class="empty-message">
+                            Iniciá sesión para ver tus reportes.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="content-card">
+                    <h2>Notificaciones</h2>
+
+                    <div id="listaNotificaciones">
+                        <p class="empty-message">
+                            Iniciá sesión para ver tus notificaciones.
+                        </p>
+                    </div>
+                </section>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer">
+        <div class="footer-info">
+            <strong>Alerta Urbana</strong>
+            <p>
+                Una plataforma para reportar y consultar
+                problemáticas de tu ciudad.
+            </p>
+        </div>
+
+        <p class="footer-copy">
+            &copy; 2026 Alerta Urbana. Proyecto académico.
+        </p>
+    </footer>
+
+</body>
+
+</html>
