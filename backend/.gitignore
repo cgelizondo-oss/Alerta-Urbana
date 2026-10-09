@@ -1,2 +1,17 @@
+# Dependencias
 node_modules/
+
+# Variables de entorno
 .env
+.env.*
+
+# Imágenes subidas por los usuarios
+uploads/
+
+# Respaldos de bases de datos
+*.sql
+*.backup
+*.dump
+
+# Archivos temporales
+*.log

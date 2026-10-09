@@ -344,3 +344,18 @@ body {
         max-width: 180px;
     }
 }
+
+/* ALERTA DE ACCESO */
+
+.mensaje-acceso {
+    margin-bottom: 18px;
+    padding: 12px 14px;
+
+    background-color: #fff4e5;
+    border: 1px solid #f0b45c;
+    border-radius: 7px;
+
+    color: #7a4b00;
+    font-size: 14px;
+    line-height: 1.4;
+}

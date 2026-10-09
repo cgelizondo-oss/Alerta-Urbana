@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crear reporte | Alerta Urbana</title>
+
+    <link rel="stylesheet" href="css/inicio.css">
+    <link rel="stylesheet" href="css/crear-reporte.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/crear-reporte.js" defer></script>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- MENÚ LATERAL -->
+        <aside class="sidebar">
+
+
+            <!-- Botón para abrir y cerrar el menú en celulares -->
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación"
+                aria-expanded="false" aria-controls="menuMobile">
+                ☰
+            </button>
+
+            <div class="sidebar-logo">
+                <a href="inicio.html" aria-label="Ir al inicio de Alerta Urbana">
+
+                    <img src="assets/logo-alerta-urbana.png" alt="">
+
+                    <span>ALERTA<br>URBANA</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav" id="menuMobile" aria-label="Menú principal">
+
+
+
+                <a href="inicio.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🏠</span>
+                    <span>Inicio</span>
+                </a>
+
+                <a href="crear-reporte.html" class="nav-link active" aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">➕</span>
+                    <span>Crear reporte</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🗺️</span>
+                    <span>Ver mapa</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🐾</span>
+                    <span>Mascotas perdidas</span>
+                </a>
+
+                <a href="login.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">🔔</span>
+                    <span>Notificaciones</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="#" class="nav-link">Configuración</a>
+                <a href="#" class="nav-link">Ayuda</a>
+            </div>
+
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+
+            <!-- ENCABEZADO -->
+            <header class="topbar">
+                <h1>Crear reporte</h1>
+
+                <!-- Opciones para visitantes -->
+                <div class="auth-actions" id="accionesVisitante">
+                    <a href="registro.html" class="btn-register">
+                        Registrarse
+                    </a>
+
+                    <a href="login.html" class="btn-login" id="btnIniciarSesion">
+                        Iniciar sesión
+                    </a>
+                </div>
+                <!-- Se muestra si HAY sesión -->
+                <div class="user-profile" id="perfilUsuario" hidden>
+                    <div class="user-avatar" aria-hidden="true"></div>
+
+                    <span id="nombreUsuario">Usuario</span>
+
+                    <button type="button" class="btn-logout" id="btnCerrarSesion">
+                        Cerrar sesión
+                    </button>
+                </div>
+            </header>
+
+            <!-- FORMULARIO CREAR REPORTE -->
+            <section class="report-form-section">
+
+                <form id="formCrearReporte" class="report-form">
+                    <div class="form-group">
+                        <label for="tipoIncidente">Tipo de incidencia</label>
+
+                        <select name="tipoIncidente" id="tipoIncidente" required>
+                            <option value="" selected disabled>Seleccionar tipo</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="titulo">Título</label>
+
+                        <input type="text" id="titulo" name="titulo" placeholder="Ej: Semáforo fuera de servicio"
+                            maxlength="100" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+
+                        <textarea name="descripcion" id="descripcion"
+                            placeholder="Describe el problema con el mayor detalle posible" rows="5" maxlength="500"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ubicacion">Ubicación</label>
+
+                        <input type="text" id="ubicacion" name="ubicacion"
+                        placeholder="Seleccioná un punto en el mapa o escribí la dirección"
+                        maxlength="150" aria-describedby="ayudaUbicacion" required>
+                    
+                    <small id="ayudaUbicacion">
+                        Podés seleccionar la ubicación en el mapa o ingresar la dirección manualmente.
+                    </small>
+
+                        <!-- Coordenadas de la ubicación -->
+                        <input type="hidden" id="latitud" name="latitud">
+                        <input type="hidden" id="longitud" name="longitud">
+                    </div>
+
+                    <div class="mapa-reporte">
+                        <div id="mapa" role="region" aria-label="Mapa para seleccionar la ubicación del incidente">
+                        </div>
+
+                        <p class="mapa-ayuda">
+                            📍 Hacé clic en el mapa para indicar la ubicación exacta del incidente.
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imagen">Subir imagen (Opcional)</label>
+
+                        <label for="imagen" class="image-upload-area">
+                            <div id="previewImagen" class="preview-imagen" hidden>
+                                <img id="imagenPreview" alt="Vista previa de la imagen seleccionada">
+                            </div>
+                            <span class="image-upload-icon">🖼️</span>
+                            <span class="image-upload-text">Seleccionar imagen</span>
+                            <span class="image-upload-help" id="ayudaImagen">JPG, PNG o WEBP (máximo 5 MB)</span>
+                        </label>
+
+                        <input type="file" id="imagen" name="imagen" class="image-input"
+                            accept="image/jpeg,image/png,image/webp"
+                            aria-describedby="ayudaImagen">
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit-report">
+                            Crear reporte
+                        </button>
+                    </div>
+
+                    <div id="mensajeReporte"
+                        class="mensaje-reporte"
+                        role="status"
+                        aria-live="polite"
+                        hidden>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer">
+        <div class="footer-info">
+            <strong>Alerta Urbana</strong>
+            <p>
+                Una plataforma para reportar y consultar
+                problemáticas de tu ciudad.
+            </p>
+        </div>
+
+        <p class="footer-copy">
+            &copy; 2026 Alerta Urbana. Proyecto académico.
+        </p>
+    </footer>
+
+</body>
+
+</html>

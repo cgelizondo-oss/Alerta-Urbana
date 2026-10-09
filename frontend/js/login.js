@@ -1,3 +1,16 @@
+// Mostrar mensaje cuando el usuario llega al login
+// desde una función que requiere iniciar sesión
+const parametrosURL = new URLSearchParams(window.location.search);
+const motivoAcceso = parametrosURL.get("motivo");
+const mensajeAcceso = document.getElementById("mensajeAcceso");
+
+if (mensajeAcceso && motivoAcceso === "reporte") {
+    mensajeAcceso.textContent =
+        "⚠️ Debes iniciar sesión para poder crear un reporte.";
+
+    mensajeAcceso.hidden = false;
+}
+
 const formLogin = document.getElementById("formLogin");
 const mensaje = document.getElementById("mensaje");
 
@@ -59,7 +72,13 @@ formLogin.addEventListener("submit", async (event) => {
             datos.mensaje || "Inicio de sesión correcto";
 
         mensaje.className = "mensaje-exito";
-        window.location.href = "inicio.html";
+        const motivo = new URLSearchParams(window.location.search).get("motivo");
+
+        if (motivo === "reporte") {
+            window.location.href = "crear-reporte.html";
+        } else {
+            window.location.href = "inicio.html";
+        }
 
     } catch (error) {
 

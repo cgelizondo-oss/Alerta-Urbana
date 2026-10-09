@@ -44,11 +44,10 @@ a {
     border-right: 1px solid #e1e5eb;
 }
 
-.sidebar-logo {
+.sidebar-logo a {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 12px 32px;
 }
 
 .sidebar-logo img {
