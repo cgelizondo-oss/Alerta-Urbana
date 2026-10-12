@@ -1,0 +1,145 @@
+/* =================================
+   MIS REPORTES - ESTILOS GENERALES
+================================= */
+
+.reportes-descripcion {
+    color: #68758a;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+/* =================================
+   TARJETAS DE REPORTES
+================================= */
+
+#listaMisReportes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.reporte-card {
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e1e5eb;
+    border-radius: 10px;
+    transition: border-color 0.2s;
+}
+
+.reporte-card:hover {
+    border-color: #bfd3ed;
+}
+
+.reporte-card h3 {
+    margin-bottom: 12px;
+    color: #172b4d;
+    font-size: 17px;
+}
+
+.reporte-card p {
+    margin-top: 8px;
+    color: #526075;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* =================================
+   ESTADO DE LOS REPORTES
+================================= */
+
+.reporte-card .reporte-estado {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 6px 12px;
+
+    background-color: #fff4d6;
+    color: #8a6500;
+
+    border: 1px solid #f1d78a;
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Estado: En proceso */
+.reporte-card .reporte-estado.estado-proceso {
+    background-color: #e5efff;
+    color: #2256a8;
+    border-color: #bfd3ed;
+}
+
+/* Estado: Resuelto */
+.reporte-card .reporte-estado.estado-resuelto {
+    background-color: #e5f6ea;
+    color: #247a42;
+    border-color: #b8e2c5;
+}
+
+
+/* Mensaje de error */
+#listaMisReportes.mensaje-error {
+    display: block;
+    background-color: #fff1f0;
+    border: 2px solid #dc2626;
+    border-left: 6px solid #dc2626;
+    border-radius: 8px;
+    padding: 18px;
+    color: #991b1b;
+}
+
+.mensaje-error strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+#listaMisReportes.mensaje-error p {
+    margin: 0;
+    color: #b42318;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* =================================
+   DISEÑO RESPONSIVE - CELULARES
+================================= */
+
+@media (max-width: 600px) {
+
+    .reportes-descripcion {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    #listaMisReportes {
+        width: 100%;
+        min-width: 0;
+        gap: 12px;
+    }
+
+    .reporte-card {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 14px;
+    }
+
+    .reporte-card h3 {
+        font-size: 15px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .reporte-card p {
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .reporte-card .reporte-estado {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+}
