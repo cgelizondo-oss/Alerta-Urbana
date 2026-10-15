@@ -1,0 +1,339 @@
+/* Imagen adjunta del reporte */
+.imagen-reporte {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: 1px solid #e1e5eb;
+}
+
+/* =================================
+   INFORMACIÓN DEL REPORTE
+================================= */
+
+#detalleReporte {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+#detalleReporte h3 {
+    color: #172b4d;
+    font-size: 22px;
+    margin: 0 0 8px;
+}
+
+#detalleReporte p {
+    color: #526075;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+/* =================================
+   ESTADOS DEL REPORTE
+================================= */
+
+#detalleReporte .reporte-estado {
+    align-self: flex-start;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #e1e5eb;
+}
+
+#detalleReporte .estado-pendiente {
+    background-color: #fff4d6;
+    color: #8a6500;
+    border-color: #f1d78a;
+}
+
+#detalleReporte .estado-proceso {
+    background-color: #e5efff;
+    color: #2256a8;
+    border-color: #bfd3ed;
+}
+
+#detalleReporte .estado-resuelto {
+    background-color: #e5f6ea;
+    color: #247a42;
+    border-color: #b8e2c5;
+}
+
+/* Sección del historial */
+.historial-container {
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #e1e5eb;
+}
+
+.historial-container h2 {
+    color: #172b4d;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#historialReporte {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#historialReporte > p {
+    color: #526075;
+    font-size: 15px;
+}
+
+/* Cada cambio de estado */
+.historial-item {
+    padding: 18px 20px;
+    background-color: #f8fafc;
+    border: 1px solid #e1e5eb;
+    border-left: 4px solid #3b82f6;
+    border-radius: 8px;
+}
+
+.historial-item h3 {
+    color: #172b4d;
+    font-size: 16px;
+    margin: 0 0 10px;
+}
+
+.historial-item p {
+    color: #526075;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 5px 0;
+}
+
+/* Botón para marcar un reporte como resuelto */
+.btn-resolver {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background-color: #16a34a;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-resolver:hover {
+    background-color: #15803d;
+}
+
+.btn-resolver:focus-visible {
+    outline: 3px solid #86efac;
+    outline-offset: 3px;
+}
+
+.btn-resolver:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Botón para avisar que una incidencia fue solucionada */
+.btn-avisar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-avisar:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.btn-avisar:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+.btn-avisar:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Mensaje de espera para enviar otro aviso */
+#detalleReporte .mensaje-proximo-aviso {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 12px 16px;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 4px;
+}
+
+
+/* Botón para denunciar reportes */
+.btn-denunciar {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 11px 20px;
+    background-color: #fff;
+    color: #c0392b;
+    border: 1px solid #c0392b;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-denunciar:hover {
+    background-color: #c0392b;
+    color: #fff;
+}
+
+.btn-denunciar:focus-visible {
+    outline: 3px solid #c0392b;
+    outline-offset: 3px;
+}
+
+.btn-denunciar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* Ventana de denuncia */
+.modal-denuncia {
+    width: min(90%, 450px);
+    max-height: 90vh;
+    padding: 25px;
+    border: none;
+    border-radius: 12px;
+    background: #fff;
+    color: #333;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+}
+
+.modal-denuncia[open] {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+}
+
+.modal-denuncia::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+/* Contenido del formulario */
+.modal-denuncia form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-denuncia h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.modal-denuncia p {
+    margin: 0 0 8px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.modal-denuncia label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.modal-denuncia select,
+.modal-denuncia textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.modal-denuncia textarea {
+    resize: vertical;
+}
+
+.modal-denuncia select:focus,
+.modal-denuncia textarea:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+/* Botones del formulario */
+.acciones-denuncia {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.acciones-denuncia button {
+    padding: 11px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#cancelarDenuncia {
+    background: #f3f4f6;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+#enviarDenuncia {
+    background: #c0392b;
+    color: white;
+    border: 1px solid #c0392b;
+}
+
+#enviarDenuncia:hover {
+    background: #a93226;
+}
+
+#enviarDenuncia:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .modal-denuncia {
+        padding: 18px;
+    }
+
+    .acciones-denuncia {
+        flex-direction: column;
+    }
+
+    .acciones-denuncia button {
+        width: 100%;
+    }
+}

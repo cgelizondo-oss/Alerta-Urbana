@@ -215,3 +215,72 @@
     border-radius: 10px;
     border: 1px solid #d1d5db;
 }
+
+
+/* =========================
+   INCIDENCIAS SIMILARES
+========================= */
+
+.incidencias-similares {
+    background-color: #fff8e6;
+    border: 1px solid #f2d58a;
+    border-left: 4px solid #e5a000;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 20px 0;
+}
+
+.incidencias-similares[hidden] {
+    display: none;
+}
+
+.incidencias-similares h3 {
+    color: #805500;
+    font-size: 17px;
+    margin: 0 0 10px;
+}
+
+.incidencias-similares p {
+    font-size: 14px;
+    color: #665326;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.tarjeta-incidencia-similar {
+    background: #ffffff;
+    border: 1px solid #ead9ad;
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 10px;
+}
+
+.tarjeta-incidencia-similar h4 {
+    margin: 0 0 8px;
+    color: #333333;
+}
+
+.tarjeta-incidencia-similar p {
+    margin: 5px 0;
+}
+
+.btn-sumarse-incidencia {
+    display: block;
+    margin-top: 12px;
+    padding: 10px 15px;
+    background-color: #145da0;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-sumarse-incidencia:hover:not(:disabled) {
+    background-color: #0d376d;
+}
+
+.btn-sumarse-incidencia:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

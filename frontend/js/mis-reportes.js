@@ -69,7 +69,14 @@ async function cargarMisReportes() {
                 estado.classList.add("estado-resuelto");
             }
 
-            tarjeta.append(titulo, tipo, ubicacion, fecha, estado);
+            // Enlace para ver la información completa del reporte
+            const verDetalles = document.createElement("a");
+
+            verDetalles.href = `detalle-reporte.html?id=${reporte.id_reporte}`;
+            verDetalles.textContent = "Ver detalles";
+            verDetalles.className = "btn-ver-detalles";
+
+            tarjeta.append(titulo, tipo, ubicacion, fecha, estado, verDetalles);
             listaMisReportes.appendChild(tarjeta);
         });
 

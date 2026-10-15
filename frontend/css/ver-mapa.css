@@ -1,0 +1,377 @@
+
+/* =========================
+   FILTROS DEL MAPA
+========================= */
+
+.filtros-mapa {
+    margin-bottom: 20px;
+}
+
+.filtros-mapa h2,
+.mapa-container h2,
+.listado-mapa h2 {
+    color: #0d376d;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.grupo-filtro {
+    margin-bottom: 16px;
+}
+
+.grupo-filtro:last-child {
+    margin-bottom: 0;
+}
+
+.grupo-filtro label {
+    display: block;
+    margin-bottom: 8px;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.grupo-filtro select {
+    width: 100%;
+    max-width: 320px;
+    padding: 11px 14px;
+
+    border: 1px solid #cfd5dc;
+    border-radius: 8px;
+
+    background-color: #fff;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.grupo-filtro select:focus {
+    outline: none;
+    border-color: #145da0;
+    box-shadow: 0 0 0 3px rgba(20, 93, 160, 0.12);
+}
+
+/* =========================
+   CONTENEDOR DEL MAPA
+========================= */
+
+.mapa-container {
+    margin-bottom: 20px;
+}
+
+.mapa-descripcion {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+#mapaIncidencias {
+    width: 100%;
+    height: 480px;
+    min-height: 350px;
+
+    border: 1px solid #d9dee5;
+    border-radius: 10px;
+
+    z-index: 0;
+}
+
+/* =========================
+   LISTADO DE REPORTES
+========================= */
+
+.listado-mapa {
+    margin-bottom: 20px;
+}
+
+#listaReportesMapa {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#listaReportesMapa .empty-message {
+    color: #6b7280;
+    font-size: 14px;
+    padding: 15px 0;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .grupo-filtro select {
+        max-width: 100%;
+    }
+
+    #mapaIncidencias {
+        height: 380px;
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .filtros-mapa h2,
+    .mapa-container h2,
+    .listado-mapa h2 {
+        font-size: 18px;
+    }
+
+    #mapaIncidencias {
+        height: 320px;
+    }
+}
+
+
+/* =========================
+   TARJETAS DE INCIDENCIAS
+========================= */
+
+/* Tarjeta completa, sin barra de desplazamiento */
+.popup-incidencia {
+    font-family: Arial, sans-serif;
+    color: #374151;
+    font-size: 13px;
+    line-height: 1.5;
+    max-height: none;
+    overflow: visible;
+    overflow-wrap: anywhere;
+}
+
+/* Permitir que Leaflet muestre toda la tarjeta */
+.leaflet-popup-content-wrapper {
+    max-height: none;
+}
+
+.leaflet-popup-content {
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+.leaflet-popup-scrolled {
+    overflow: visible !important;
+    border-bottom: none;
+}
+
+.popup-incidencia h3 {
+    color: #0d376d;
+    font-size: 17px;
+    margin: 0 0 12px;
+}
+
+.popup-incidencia p {
+    margin: 0 0 9px;
+    overflow-wrap: anywhere;
+}
+
+.popup-ver-detalle {
+    display: block;
+    margin-top: 14px;
+    padding: 10px 12px;
+
+    background-color: #145da0;
+    color: #fff !important;
+
+    border-radius: 7px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+
+    transition: background-color 0.2s;
+}
+
+.popup-ver-detalle:hover {
+    background-color: #0d376d;
+}
+
+.popup-ver-detalle:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+
+/* =========================
+   TARJETAS DEL LISTADO
+========================= */
+
+.tarjeta-reporte-mapa {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #2563eb;
+    border-radius: 10px;
+    padding: 18px 20px;
+
+    transition: box-shadow 0.2s ease;
+}
+
+.tarjeta-reporte-mapa:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tarjeta-reporte-mapa h3 {
+    color: #0d376d;
+    font-size: 17px;
+    margin: 0 0 12px;
+    overflow-wrap: anywhere;
+}
+
+.tarjeta-reporte-mapa p {
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 8px;
+    overflow-wrap: anywhere;
+}
+
+.enlace-reporte-mapa {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 9px 16px;
+
+    background-color: #145da0;
+    color: #ffffff;
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.enlace-reporte-mapa:hover {
+    background-color: #0d376d;
+    color: #ffffff;
+}
+
+.enlace-reporte-mapa:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}
+
+/* Adaptación a celulares */
+@media (max-width: 480px) {
+    .tarjeta-reporte-mapa {
+        padding: 15px;
+    }
+
+    .enlace-reporte-mapa {
+        display: block;
+        text-align: center;
+    }
+}
+
+/* =========================
+   BOTONES DEL LISTADO
+========================= */
+
+.tarjeta-reporte-mapa .enlace-reporte-mapa {
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.tarjeta-reporte-mapa button.enlace-reporte-mapa {
+    background-color: #e8f1fb;
+    color: #145da0;
+}
+
+.tarjeta-reporte-mapa button.enlace-reporte-mapa:hover {
+    background-color: #d1e5fa;
+}
+
+@media (max-width: 480px) {
+    .tarjeta-reporte-mapa .enlace-reporte-mapa {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
+
+/* Botón para sumarse a una incidencia */
+
+.popup-incidencia button.popup-ver-detalle {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.popup-incidencia button.popup-ver-detalle:disabled {
+    background-color: #e2e8f0;
+    color: #64748b;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+
+/* Enlace para denunciar reportes desde el mapa */
+.popup-denunciar {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    padding: 10px 14px;
+
+    background-color: #fff;
+    color: #c0392b;
+    border: 1px solid #c0392b;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.popup-denunciar:hover {
+    background-color: #c0392b;
+    color: #fff;
+}
+
+.popup-denunciar:focus-visible {
+    outline: 3px solid #c0392b;
+    outline-offset: 3px;
+}
+
+
+@media (max-width: 600px) {
+    .leaflet-popup-content {
+        overflow-wrap: break-word;
+    }
+
+    .leaflet-popup-content button,
+    .leaflet-popup-content .popup-ver-detalle,
+    .leaflet-popup-content .popup-denunciar {
+        max-width: 100%;
+        box-sizing: border-box;
+        white-space: normal;
+    }
+}
+
+
+/* Permitir desplazamiento dentro de las tarjetas del mapa */
+.popup-incidencia .leaflet-popup-content {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+}
+
+.popup-incidencia .leaflet-popup-content > * {
+    max-width: 100%;
+    box-sizing: border-box;
+}

@@ -8,6 +8,7 @@ const registrarUsuario = async (req, res) => {
         const {
             nombre,
             apellido,
+            dni,
             localidad,
             calle,
             numero,
@@ -19,6 +20,7 @@ const registrarUsuario = async (req, res) => {
         //Limpiar espacios al principio y al final
         const nombreLimpio = nombre?.trim();
         const apellidoLimpio = apellido?.trim();
+        const dniLimpio = typeof dni === "string" ? dni.trim() : "";
         const localidadLimpia = localidad?.trim();
         const calleLimpia = calle?.trim();
         const numeroLimpio = numero?.trim();
@@ -27,13 +29,14 @@ const registrarUsuario = async (req, res) => {
         const confirmarPasswordLimpia = confirmarPassword?.trim();
 
         // Validar campos obligatorios
-        if(
+        if (
             !nombreLimpio ||
             !apellidoLimpio ||
+            !dniLimpio ||
             !localidadLimpia ||
             !calleLimpia ||
-            !numeroLimpio || 
-            !emailLimpio || 
+            !numeroLimpio ||
+            !emailLimpio ||
             !passwordLimpia ||
             !confirmarPasswordLimpia
         ) {
@@ -41,11 +44,20 @@ const registrarUsuario = async (req, res) => {
                 mensaje: "Todos los campos son obligatorios y no pueden ser solo espacios"
             });
         }
-        
+
+        // Validar DNI  (7 u 8 dígitos, sin puntos)
+        const dniRegex = /^[0-9]{7,8}$/;
+
+        if (!dniRegex.test(dniLimpio)) {
+            return res.status(400).json({
+                mensaje: "El DNI debe contener 7 u 8 números, sin puntos ni espacios"
+            });
+        }
+
         // Validar formato del email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if(!emailRegex.test(emailLimpio)) {
+        if (!emailRegex.test(emailLimpio)) {
             return res.status(400).json({
                 mensaje: "El correo electronico no es valido"
             });
@@ -54,7 +66,7 @@ const registrarUsuario = async (req, res) => {
         // Validar nombre y apellido (solo letras y espacios)
         const nombreApellidoRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
 
-        if(!nombreApellidoRegex.test(nombreLimpio)) {
+        if (!nombreApellidoRegex.test(nombreLimpio)) {
             return res.status(400).json({
                 mensaje: "El nombre solo puede contener letras y espacios"
             });
@@ -67,14 +79,14 @@ const registrarUsuario = async (req, res) => {
         }
 
         // Validar que nombre y apellido tengan un maximo de 50 caracteres
-        if(nombreLimpio.length > 50) {
+        if (nombreLimpio.length > 50) {
             return res.status(400).json({
                 mensaje: "El nombre no puede tener mas de 50 caracteres"
             });
         }
 
         // Validar que nombre y apellido tengan un maximo de 50 caracteres
-        if(apellidoLimpio.length > 50) {
+        if (apellidoLimpio.length > 50) {
             return res.status(400).json({
                 mensaje: "El apellido no puede tener mas de 50 caracteres"
             });
@@ -102,13 +114,13 @@ const registrarUsuario = async (req, res) => {
         // Validar contraseña
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
-        if(!passwordRegex.test(passwordLimpia)) {
+        if (!passwordRegex.test(passwordLimpia)) {
             return res.status(400).json({
                 mensaje: "La contraseña debe tener al menos 8 caracteres, una letra y un numero"
             });
         }
 
-        if(passwordLimpia !== confirmarPasswordLimpia) {
+        if (passwordLimpia !== confirmarPasswordLimpia) {
             return res.status(400).json({
                 mensaje: "Las contraseñas no coinciden"
             });
@@ -117,30 +129,42 @@ const registrarUsuario = async (req, res) => {
         // Verificar si el email ya está registrado
         const usuarioExistente = await pool.query(
             "SELECT id_usuario FROM usuarios WHERE email = $1",
-                [emailLimpio]
+            [emailLimpio]
         );
-        
+
         if (usuarioExistente.rows.length > 0) {
             return res.status(409).json({
                 mensaje: "El correo electronico ya esta registrado"
             });
         }
 
+        // Verificar si el DNI ya está registrado
+        const dniExistente = await pool.query(
+            "SELECT id_usuario FROM usuarios WHERE dni = $1",
+            [dniLimpio]
+        );
+
+        if (dniExistente.rows.length > 0) {
+            return res.status(409).json({
+                mensaje: "El DNI ya está registrado"
+            });
+        }
+
         // Encriptar contraseña
         const passwordHash = await bcrypt.hash(passwordLimpia, 10);
 
-       
-       // Crear usuario con su domicilio y el rol "usuario"
+
+        // Crear usuario con su domicilio y el rol "usuario"
         const nuevoUsuario = await pool.query(
             `
             INSERT INTO usuarios
             (
-                nombre, apellido, localidad, calle, numero,
+                nombre, apellido, dni, localidad, calle, numero,
                 email, password, id_rol, estado, fecha_registro
             )
             VALUES (
-                $1, $2, $3, $4, $5,
-                $6, $7,
+                $1, $2, $3, $4, $5, $6,
+                $7, $8,
                 (SELECT id_rol FROM roles WHERE nombre = 'usuario'),
                 true, CURRENT_TIMESTAMP
             )
@@ -151,6 +175,7 @@ const registrarUsuario = async (req, res) => {
             [
                 nombreLimpio,
                 apellidoLimpio,
+                dniLimpio,
                 localidadLimpia,
                 calleLimpia,
                 numeroLimpio,
@@ -164,23 +189,30 @@ const registrarUsuario = async (req, res) => {
         });
     } catch (error) {
         console.error("Error al registrar usuario: ", error);
+
+        if (error.code === "23505") {
+            return res.status(409).json({
+                mensaje: "El correo electrónico o DNI ya está registrado"
+            });
+        }
+
         return res.status(500).json({
             mensaje: "Error interno del servidor"
         });
     }
 };
 
-const iniciarSesion = async(req, res) => {
+const iniciarSesion = async (req, res) => {
     try {
         const {
             email,
             password
         } = req.body;
-        
+
         const emailLimpio = email?.trim().toLowerCase();
         const passwordLimpia = password?.trim();
 
-        if(!emailLimpio || !passwordLimpia) {
+        if (!emailLimpio || !passwordLimpia) {
             return res.status(400).json({
                 mensaje: "Email y contraseña son obligatorios"
             });
@@ -204,7 +236,7 @@ const iniciarSesion = async(req, res) => {
             [emailLimpio]
         );
 
-        if(resultadoUsuario.rows.length ===0) {
+        if (resultadoUsuario.rows.length === 0) {
             return res.status(401).json({
                 mensaje: "Correo o contraseña incorrectos"
             });
@@ -268,7 +300,7 @@ const solicitarRecuperacion = async (req, res) => {
 
         const emailLimpio = email?.trim().toLowerCase();
 
-        if(!emailLimpio) {
+        if (!emailLimpio) {
             return res.status(400).json({
                 mensaje: "El email es obligatorio"
             });
@@ -305,19 +337,19 @@ const solicitarRecuperacion = async (req, res) => {
         );
 
         await pool.query(
-          `
+            `
           INSERT INTO recuperacion_password
           (id_usuario, token, fecha_expiracion, utilizado, fecha_creacion)
           VALUES ($1, $2, CURRENT_TIMESTAMP + INTERVAL '15 minutes', false, CURRENT_TIMESTAMP)
           `,
-          [
-            usuario.id_usuario,
-            tokenRecuperacion
-          ]
+            [
+                usuario.id_usuario,
+                tokenRecuperacion
+            ]
         );
 
         return res.status(200).json({
-            mensaje:"Solicitud de recuperacion generada correctamente",
+            mensaje: "Solicitud de recuperacion generada correctamente",
             token: tokenRecuperacion
         });
     } catch (error) {
@@ -326,7 +358,7 @@ const solicitarRecuperacion = async (req, res) => {
         return res.status(500).json({
             mensaje: "Error interno del servidor"
         });
-        
+
     }
 };
 
@@ -346,7 +378,7 @@ const restablecerPassword = async (req, res) => {
             !tokenLimpio ||
             !nuevaPasswordLimpia ||
             !confirmarPasswordLimpia
-        ){
+        ) {
             return res.status(400).jason({
                 mensaje: "Todos los campos son obligatorios"
             });
@@ -423,15 +455,15 @@ const restablecerPassword = async (req, res) => {
         );
 
         await pool.query(
-         `
+            `
          UPDATE usuarios
          SET password = $1
          WHERE id_usuario = $2
          `,
-         [
-            nuevaPasswordHash,
-            recuperacion.id_usuario
-         ]   
+            [
+                nuevaPasswordHash,
+                recuperacion.id_usuario
+            ]
         );
 
         await pool.query(
@@ -452,7 +484,7 @@ const restablecerPassword = async (req, res) => {
         return res.status(500).json({
             mensaje: "Error interno del servidor"
         });
-        
+
     }
 };
 

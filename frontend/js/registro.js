@@ -7,6 +7,7 @@ formRegistro.addEventListener("submit", async (event) => {
 
     const nombre = document.getElementById("nombre").value;
     const apellido = document.getElementById("apellido").value;
+    const dni = document.getElementById("dni").value.trim();
     const localidad = document.getElementById("localidad").value;
     const calle = document.getElementById("calle").value;
     const numero = document.getElementById("numero").value;
@@ -18,6 +19,7 @@ formRegistro.addEventListener("submit", async (event) => {
         const datosUsuario = {
             nombre,
             apellido,
+            dni,
             localidad,
             calle,
             numero,

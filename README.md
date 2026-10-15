@@ -58,7 +58,7 @@ Contraseña: Prueba123
 
 Correo: frontend@prueba.com
 Contraseña: Frontend123
-comando para iniciar: node src\app.js
+comando para iniciar: npm start
 
 
 

@@ -4,6 +4,7 @@ const pool = require("./config/db");
 const usuarioRoutes = require("./routes/usuarioRoutes");
 const tipoIncidenciaRoutes = require("./routes/tipoIncidenciaRoutes");
 const reporteRoutes = require("./routes/reporteRoutes");
+const { revisarReportesInactivos } = reporteRoutes;
 const path = require("path");
 
 const app = express();
@@ -36,6 +37,15 @@ async function probarConexion() {
 
 probarConexion();
 
-app.listen(PORT, ()=>{
+
+app.listen(PORT, () => {
     console.log(`Servidor ejecutandose en http://localhost:${PORT}`);
+
+    // Revisar reportes inactivos al iniciar el servidor
+    revisarReportesInactivos();
+
+    // Volver a revisar cada hora
+    setInterval(() => {
+        revisarReportesInactivos();
+    }, 60 * 60 * 1000);
 });

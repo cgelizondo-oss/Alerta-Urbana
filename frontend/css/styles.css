@@ -57,11 +57,9 @@ body {
 .panel-logo {
     width: 45%;
 
-    background: linear-gradient(
-        145deg,
-        #f5f8fc,
-        #e8eef6
-    );
+    background: linear-gradient(145deg,
+            #f5f8fc,
+            #e8eef6);
 
     display: flex;
     flex-direction: column;
@@ -175,7 +173,7 @@ body {
     outline: none;
 
     transition: border-color 0.2s,
-                box-shadow 0.2s;
+        box-shadow 0.2s;
 }
 
 
@@ -212,23 +210,58 @@ body {
 
 
 /* =========================
-   MENSAJES
+   MENSAJES DE REGISTRO
 ========================= */
 
 #mensaje {
-    text-align: center;
+    display: none;
+    padding: 13px 16px;
+    margin-bottom: 18px;
 
-    font-size: 13px;
+    border-radius: 8px;
+    border: 1px solid transparent;
 
-    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: left;
 }
 
-.mensaje-error {
-    color: #c62828;
+/* MENSAJE DE ERROR */
+
+#mensaje.mensaje-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background-color: #fff1f2;
+    border-color: #fecdd3;
+    color: #b91c1c;
 }
 
-.mensaje-exito {
-    color: #2e7d32;
+#mensaje.mensaje-error::before {
+    content: "⚠";
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+/* MENSAJE DE ÉXITO */
+
+#mensaje.mensaje-exito {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+#mensaje.mensaje-exito::before {
+    content: "✓";
+    font-size: 20px;
+    font-weight: bold;
+    flex-shrink: 0;
 }
 
 
@@ -253,7 +286,7 @@ body {
     cursor: pointer;
 
     transition: background-color 0.2s,
-                transform 0.1s;
+        transform 0.1s;
 }
 
 .btn-registro:hover {

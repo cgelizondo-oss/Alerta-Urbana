@@ -86,6 +86,28 @@
 
                     <div class="campo">
 
+                        <label for="dni">
+                            DNI
+                        </label>
+                    
+                        <input
+                            type="text"
+                            id="dni"
+                            name="dni"
+                            placeholder="Ingresá tu DNI sin puntos"
+                            minlength="7"
+                            maxlength="8"
+                            inputmode="numeric"
+                            pattern="[0-9]{7,8}"
+                            title="El DNI debe tener 7 u 8 números, sin puntos"
+                            autocomplete="off"
+                            required
+                        >
+                    
+                    </div>
+
+                    <div class="campo">
+
                         <label for="localidad">
                             Localidad
                         </label>

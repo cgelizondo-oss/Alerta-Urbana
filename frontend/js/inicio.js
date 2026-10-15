@@ -12,6 +12,11 @@ const textoBienvenida = document.getElementById("textoBienvenida");
 const listaReportes = document.getElementById("listaReportes");
 const listaNotificaciones = document.getElementById("listaNotificaciones");
 
+// Contadores de reportes del usuario
+const totalReportes = document.getElementById("totalReportes");
+const reportesPendientes = document.getElementById("reportesPendientes");
+const reportesResueltos = document.getElementById("reportesResueltos");
+
 // Estado inicial: visitante
 function mostrarVisitante() {
     accionesVisitante.hidden = false;
@@ -41,6 +46,70 @@ function mostrarUsuario(usuario) {
     listaReportes.textContent = "Todavía no hay reportes para mostrar.";
     listaNotificaciones.textContent =
         "No hay notificaciones para mostrar.";
+}
+
+// Consultar los reportes recientes del usuario autenticado
+async function cargarReportesRecientes(token) {
+    listaReportes.textContent = "Cargando tus reportes recientes...";
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/reportes/mis-reportes",
+            {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            }
+        );
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudieron cargar los reportes");
+        }
+
+        const datos = await respuesta.json();
+
+        // Calcular estadísticas del usuario
+        const reportes = datos.reportes;
+
+        const pendientes = reportes.filter(
+            reporte => reporte.estado?.trim().toLowerCase() === "pendiente"
+        ).length;
+
+        const resueltos = reportes.filter(
+            reporte => reporte.estado?.trim().toLowerCase() === "resuelto"
+        ).length;
+
+        // Actualizar los contadores de Inicio
+        totalReportes.textContent = reportes.length;
+        reportesPendientes.textContent = pendientes;
+        reportesResueltos.textContent = resueltos;
+
+        if (datos.reportes.length === 0) {
+            listaReportes.textContent =
+                "Todavía no realizaste ningún reporte.";
+            return;
+        }
+
+        // Mostrar únicamente los últimos 3 reportes
+        const recientes = datos.reportes.slice(0, 3);
+
+        listaReportes.replaceChildren();
+
+        recientes.forEach(reporte => {
+            const elemento = document.createElement("p");
+
+            elemento.textContent =
+                `#${reporte.id_reporte} - ${reporte.titulo} | Estado: ${reporte.estado}`;
+
+            listaReportes.appendChild(elemento);
+        });
+
+    } catch (error) {
+        console.error("Error al cargar reportes recientes:", error);
+
+        listaReportes.textContent =
+            "No se pudieron cargar tus reportes recientes.";
+    }
 }
 
 // Comprobar la sesión con el backend
@@ -77,6 +146,7 @@ async function comprobarSesion() {
         const usuario = datos.usuario || datos;
 
         mostrarUsuario(usuario);
+        cargarReportesRecientes(token);
 
     } catch (error) {
         console.error("No se pudo comprobar la sesión:", error);

@@ -143,3 +143,29 @@
         padding: 5px 10px;
     }
 }
+
+/* Botón para acceder al detalle del reporte */
+.btn-ver-detalles {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-top: 12px;
+    padding: 10px 18px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ver-detalles:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-ver-detalles:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+}

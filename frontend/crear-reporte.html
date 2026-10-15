@@ -52,7 +52,12 @@
                     <span>Crear reporte</span>
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="mis-reportes.html" class="nav-link" aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">📋</span>
+                    <span>Mis reportes</span>
+                </a>
+
+                <a href="ver-mapa.html" class="nav-link">
                     <span class="nav-icon" aria-hidden="true">🗺️</span>
                     <span>Ver mapa</span>
                 </a>
@@ -136,12 +141,12 @@
                         <label for="ubicacion">Ubicación</label>
 
                         <input type="text" id="ubicacion" name="ubicacion"
-                        placeholder="Seleccioná un punto en el mapa o escribí la dirección"
-                        maxlength="150" aria-describedby="ayudaUbicacion" required>
-                    
-                    <small id="ayudaUbicacion">
-                        Podés seleccionar la ubicación en el mapa o ingresar la dirección manualmente.
-                    </small>
+                            placeholder="Seleccioná un punto en el mapa o escribí la dirección" maxlength="150"
+                            aria-describedby="ayudaUbicacion" required>
+
+                        <small id="ayudaUbicacion">
+                            Podés seleccionar la ubicación en el mapa o ingresar la dirección manualmente.
+                        </small>
 
                         <!-- Coordenadas de la ubicación -->
                         <input type="hidden" id="latitud" name="latitud">
@@ -170,10 +175,23 @@
                         </label>
 
                         <input type="file" id="imagen" name="imagen" class="image-input"
-                            accept="image/jpeg,image/png,image/webp"
-                            aria-describedby="ayudaImagen">
+                            accept="image/jpeg,image/png,image/webp" aria-describedby="ayudaImagen">
 
                     </div>
+
+
+                    <!-- Advertencia de incidencias similares -->
+                    <div id="incidenciasSimilares" class="incidencias-similares" hidden>
+                        <h3>⚠️ Ya existen incidencias similares cerca</h3>
+
+                        <p>
+                            Encontramos reportes de la misma categoría a menos
+                            de 30 metros de la ubicación seleccionada.
+                        </p>
+
+                        <div id="listaIncidenciasSimilares"></div>
+                    </div>
+
 
                     <div class="form-actions">
                         <button type="submit" class="btn-submit-report">
@@ -181,11 +199,7 @@
                         </button>
                     </div>
 
-                    <div id="mensajeReporte"
-                        class="mensaje-reporte"
-                        role="status"
-                        aria-live="polite"
-                        hidden>
+                    <div id="mensajeReporte" class="mensaje-reporte" role="status" aria-live="polite" hidden>
                     </div>
 
                 </form>
