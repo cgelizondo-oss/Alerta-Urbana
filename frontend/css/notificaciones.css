@@ -1,0 +1,176 @@
+
+/* CONTENEDOR DE NOTIFICACIONES */
+
+.notificaciones-descripcion {
+    margin: 8px 0 24px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#listaNotificaciones {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+/* TARJETAS */
+
+.notificacion-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid #d9dce1;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.notificacion-card.no-leida {
+    border-left: 4px solid #dc2626;
+    background-color: #fffafa;
+}
+
+.notificacion-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.notificacion-titulo {
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+}
+
+.notificacion-mensaje {
+    margin: 0 0 12px;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.notificacion-detalle {
+    margin: 5px 0;
+    color: #555;
+    font-size: 13px;
+}
+
+.notificacion-estado {
+    font-weight: 600;
+}
+
+.notificacion-card.no-leida .notificacion-estado {
+    color: #dc2626;
+}
+
+/* BOTÓN MARCAR LEÍDA */
+
+.btn-marcar-leida {
+    flex-shrink: 0;
+    padding: 11px 18px;
+    border: 1px solid #bfc3c9;
+    border-radius: 7px;
+    background-color: #fff;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-marcar-leida:hover {
+    background-color: #f2f3f5;
+}
+
+.btn-marcar-leida:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* CONTADOR DEL MENÚ */
+
+.contador-notificaciones {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    margin-left: auto;
+    border-radius: 999px;
+    background-color: #dc2626;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.contador-notificaciones[hidden] {
+    display: none;
+}
+
+/* MENSAJES */
+
+#listaNotificaciones .empty-message {
+    padding: 24px;
+    text-align: center;
+    color: #666;
+}
+
+/* VERSIÓN CELULAR */
+
+@media (max-width: 768px) {
+
+    .notificacion-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .notificacion-titulo {
+        font-size: 15px;
+    }
+
+    .notificacion-mensaje {
+        font-size: 14px;
+    }
+
+    .btn-marcar-leida {
+        align-self: flex-start;
+        min-width: 150px;
+    }
+
+    .notificaciones-descripcion {
+        font-size: 13px;
+    }
+}
+
+
+/* Botón para acceder al detalle del reporte */
+.btn-ver-reporte {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 10px 16px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ver-reporte:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-ver-reporte:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}

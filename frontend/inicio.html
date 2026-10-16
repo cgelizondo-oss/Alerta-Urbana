@@ -57,10 +57,13 @@
                     <span>Mascotas perdidas</span>
                 </a>
 
-                <a href="login.html" class="nav-link" data-requiere-sesion>
+
+                <a href="notificaciones.html" class="nav-link" data-requiere-sesion>
                     <span class="nav-icon" aria-hidden="true">🔔</span>
                     <span>Notificaciones</span>
+                    <span id="contadorNotificaciones" class="contador-notificaciones" hidden></span>
                 </a>
+
 
             </nav>
 
@@ -78,6 +81,13 @@
             <header class="topbar">
                 <h1>Inicio</h1>
 
+                <!-- Campana de notificaciones para celulares -->
+                <a href="notificaciones.html" class="campana-notificaciones-mobile" id="campanaNotificacionesMobile"
+                    aria-label="Ver notificaciones" hidden>
+                    🔔
+                    <span class="contador-campana-mobile" id="contadorCampanaMobile"></span>
+                </a>
+
                 <!-- Opciones para visitantes -->
                 <div class="auth-actions" id="accionesVisitante">
                     <a href="registro.html" class="btn-register">
@@ -88,6 +98,7 @@
                         Iniciar sesión
                     </a>
                 </div>
+
                 <!-- Se muestra si HAY sesión -->
                 <div class="user-profile" id="perfilUsuario" hidden>
                     <div class="user-avatar" aria-hidden="true"></div>
@@ -99,6 +110,7 @@
                     </button>
                 </div>
             </header>
+
 
             <!-- BIENVENIDA -->
 

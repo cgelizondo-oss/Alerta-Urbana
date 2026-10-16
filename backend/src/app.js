@@ -4,6 +4,7 @@ const pool = require("./config/db");
 const usuarioRoutes = require("./routes/usuarioRoutes");
 const tipoIncidenciaRoutes = require("./routes/tipoIncidenciaRoutes");
 const reporteRoutes = require("./routes/reporteRoutes");
+const notificacionRoutes = require("./routes/notificacionRoutes");
 const { revisarReportesInactivos } = reporteRoutes;
 const path = require("path");
 
@@ -22,6 +23,7 @@ app.use(
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/tipos-incidencia", tipoIncidenciaRoutes);
 app.use("/api/reportes", reporteRoutes);
+app.use("/api/notificaciones", notificacionRoutes);
 
 async function probarConexion() {
     try{

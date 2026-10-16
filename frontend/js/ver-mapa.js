@@ -273,6 +273,65 @@ const perfilUsuario = document.getElementById("perfilUsuario");
 const nombreUsuario = document.getElementById("nombreUsuario");
 const btnCerrarSesion = document.getElementById("btnCerrarSesion");
 
+
+
+async function actualizarContadorNotificaciones(token) {
+    const contador = document.getElementById("contadorNotificaciones");
+    const campanaMobile = document.getElementById("campanaNotificacionesMobile");
+    const contadorMobile = document.getElementById("contadorCampanaMobile");
+
+    // Ocultar inicialmente los contadores
+    if (contador) {
+        contador.hidden = true;
+        contador.textContent = "";
+    }
+
+    if (campanaMobile) {
+        campanaMobile.hidden = true;
+    }
+
+    if (contadorMobile) {
+        contadorMobile.textContent = "";
+    }
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/notificaciones/sin-leer",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        if (cantidad > 0) {
+            const textoCantidad = cantidad > 9 ? "10+" : String(cantidad);
+
+            // Contador del menú lateral
+            if (contador) {
+                contador.textContent = textoCantidad;
+                contador.hidden = false;
+            }
+
+            // Campana del encabezado móvil
+            if (campanaMobile && contadorMobile) {
+                contadorMobile.textContent = textoCantidad;
+                campanaMobile.hidden = false;
+            }
+        }
+
+    } catch (error) {
+        console.error("Error al consultar notificaciones:", error);
+    }
+}
+
+
+
 async function verificarSesionMapa() {
     const token = localStorage.getItem("token");
 
@@ -312,6 +371,7 @@ async function verificarSesionMapa() {
         accionesVisitante.hidden = true;
         perfilUsuario.hidden = false;
         nombreUsuario.textContent = usuario.nombre || "Usuario";
+        actualizarContadorNotificaciones(token);
 
     } catch (error) {
         console.error("Error al verificar la sesión:", error);
@@ -613,8 +673,3 @@ if (menuToggle && menuMobile) {
         menuToggle.setAttribute("aria-expanded", String(estaAbierto));
     });
 }
-
-
-
-
-

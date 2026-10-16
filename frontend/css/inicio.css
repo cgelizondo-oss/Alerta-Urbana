@@ -1,4 +1,3 @@
-
 /* CONFIGURACIÓN GENERAL */
 
 * {
@@ -680,4 +679,149 @@ a {
     color: #334155;
     font-size: 14px;
     line-height: 1.5;
+}
+
+
+/* CONTADOR DE NOTIFICACIONES */
+
+.contador-notificaciones {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    margin-left: auto;
+    border-radius: 999px;
+    background-color: #dc2626;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.contador-notificaciones[hidden] {
+    display: none;
+}
+
+
+/* ==============================
+   CAMPANA DE NOTIFICACIONES MÓVIL
+============================== */
+
+/* Oculta en computadoras */
+.campana-notificaciones-mobile {
+    display: none;
+}
+
+/* Respetar el atributo hidden */
+.campana-notificaciones-mobile[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .campana-notificaciones-mobile:not([hidden]) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        flex-shrink: 0;
+        font-size: 22px;
+        text-decoration: none;
+        margin-left: auto;
+        padding: 8px;
+    }
+
+    .contador-campana-mobile {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border-radius: 999px;
+        background-color: #dc2626;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+}
+
+
+/* Notificaciones recientes en Inicio */
+.notificacion-reciente {
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.notificacion-reciente:last-child {
+    margin-bottom: 0;
+}
+
+.notificacion-reciente strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #1e3a5f;
+    font-size: 15px;
+}
+
+.notificacion-reciente p {
+    margin: 0 0 8px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+.notificacion-reciente small {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+
+/* Botón Ver reporte en las notificaciones de Inicio */
+.btn-ver-reporte-inicio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin-top: 10px;
+    padding: 9px 15px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-ver-reporte-inicio:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-ver-reporte-inicio:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+
+/* Destacar notificaciones pendientes */
+.notificacion-reciente.no-leida {
+    background-color: #eff6ff;
+    border-color: #93c5fd;
+}
+
+.notificacion-reciente.no-leida strong {
+    color: #1d4ed8;
 }

@@ -18,6 +18,7 @@ const reportesPendientes = document.getElementById("reportesPendientes");
 const reportesResueltos = document.getElementById("reportesResueltos");
 
 // Estado inicial: visitante
+
 function mostrarVisitante() {
     accionesVisitante.hidden = false;
     perfilUsuario.hidden = true;
@@ -29,7 +30,28 @@ function mostrarVisitante() {
     listaReportes.textContent = "Iniciá sesión para ver tus reportes.";
     listaNotificaciones.textContent =
         "Iniciá sesión para ver tus notificaciones.";
+
+    // Ocultar contador del menú lateral
+    const contador = document.getElementById("contadorNotificaciones");
+
+    if (contador) {
+        contador.hidden = true;
+        contador.textContent = "";
+    }
+
+    // Ocultar campana de notificaciones móvil
+    const campanaMobile = document.getElementById("campanaNotificacionesMobile");
+    const contadorMobile = document.getElementById("contadorCampanaMobile");
+
+    if (campanaMobile) {
+        campanaMobile.hidden = true;
+    }
+
+    if (contadorMobile) {
+        contadorMobile.textContent = "";
+    }
 }
+
 
 // Estado de usuario autenticado
 function mostrarUsuario(usuario) {
@@ -112,6 +134,198 @@ async function cargarReportesRecientes(token) {
     }
 }
 
+
+async function cargarNotificacionesRecientes(token) {
+    listaNotificaciones.textContent = "Cargando notificaciones...";
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/notificaciones",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudieron cargar las notificaciones");
+        }
+
+        const datos = await respuesta.json();
+        const notificaciones = datos.notificaciones || [];
+
+        listaNotificaciones.replaceChildren();
+
+        if (notificaciones.length === 0) {
+            listaNotificaciones.textContent =
+                "Todavía no tenés notificaciones.";
+            return;
+        }
+
+        // Mostrar las últimas 3 notificaciones
+        const recientes = [...notificaciones]
+            .sort((a, b) =>
+                new Date(b.fecha_hora) - new Date(a.fecha_hora)
+            )
+            .slice(0, 3);
+
+        recientes.forEach(notificacion => {
+            const elemento = document.createElement("div");
+            elemento.className = "notificacion-reciente";
+
+
+            if (!notificacion.leida) {
+                elemento.classList.add("no-leida");
+            }
+
+
+            const titulo = document.createElement("strong");
+            titulo.textContent = notificacion.titulo;
+
+            const mensaje = document.createElement("p");
+            mensaje.textContent = notificacion.mensaje;
+
+            const fecha = document.createElement("small");
+            fecha.textContent = new Date(
+                notificacion.fecha_hora
+            ).toLocaleString("es-AR");
+
+
+            elemento.append(titulo, mensaje, fecha);
+
+            // Agregar enlace cuando la notificación tenga un reporte
+            if (notificacion.id_reporte) {
+                const enlaceReporte = document.createElement("a");
+
+                enlaceReporte.href =
+                    `detalle-reporte.html?id=${encodeURIComponent(notificacion.id_reporte)}`;
+
+                enlaceReporte.className = "btn-ver-reporte-inicio";
+                enlaceReporte.textContent = "Ver reporte";
+
+                enlaceReporte.addEventListener("click", async (evento) => {
+                    // Si ya está leída, abrir directamente
+                    if (notificacion.leida) return;
+
+                    evento.preventDefault();
+
+                    enlaceReporte.textContent = "Abriendo...";
+                    enlaceReporte.style.pointerEvents = "none";
+
+                    try {
+                        const respuesta = await fetch(
+                            `http://localhost:3000/api/notificaciones/${notificacion.id_notificacion}/leer`,
+                            {
+                                method: "PATCH",
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            }
+                        );
+
+                        if (!respuesta.ok) {
+                            throw new Error("No se pudo marcar como leída");
+                        }
+
+                        window.location.href = enlaceReporte.href;
+
+                    } catch (error) {
+                        console.error("Error al abrir el reporte:", error);
+
+                        enlaceReporte.textContent = "Ver reporte";
+                        enlaceReporte.style.pointerEvents = "";
+
+                        alert("No se pudo marcar la notificación como leída.");
+                    }
+                });
+
+                elemento.appendChild(enlaceReporte);
+            }
+
+            listaNotificaciones.appendChild(elemento);
+
+        });
+
+    } catch (error) {
+        console.error("Error al cargar notificaciones:", error);
+
+        listaNotificaciones.textContent =
+            "No se pudieron cargar tus notificaciones.";
+    }
+}
+
+
+async function actualizarContadorNotificaciones(token) {
+    const contador = document.getElementById("contadorNotificaciones");
+
+    const campanaMobile = document.getElementById("campanaNotificacionesMobile");
+    const contadorMobile = document.getElementById("contadorCampanaMobile");
+
+    if (!contador) return;
+
+    contador.hidden = true;
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/notificaciones/sin-leer",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) {
+            return;
+        }
+
+        const datos = await respuesta.json();
+        const cantidad = datos.cantidad;
+
+
+        if (cantidad > 0) {
+            const textoCantidad = cantidad > 9 ? "10+" : cantidad;
+
+            // Contador del menú lateral
+            contador.textContent = textoCantidad;
+            contador.hidden = false;
+
+            // Campana del encabezado móvil
+            if (campanaMobile && contadorMobile) {
+                contadorMobile.textContent = textoCantidad;
+                campanaMobile.hidden = false;
+            }
+        } else {
+            // Ocultar contador lateral
+            contador.textContent = "";
+            contador.hidden = true;
+
+            // Ocultar campana móvil
+            if (campanaMobile && contadorMobile) {
+                contadorMobile.textContent = "";
+                campanaMobile.hidden = true;
+            }
+        }
+
+
+    } catch (error) {
+        console.error("Error al consultar notificaciones:", error);
+
+        contador.hidden = true;
+        contador.textContent = "";
+
+        if (campanaMobile) {
+            campanaMobile.hidden = true;
+        }
+
+        if (contadorMobile) {
+            contadorMobile.textContent = "";
+        }
+    }
+}
+
+
 // Comprobar la sesión con el backend
 async function comprobarSesion() {
     mostrarVisitante();
@@ -147,6 +361,8 @@ async function comprobarSesion() {
 
         mostrarUsuario(usuario);
         cargarReportesRecientes(token);
+        actualizarContadorNotificaciones(token);
+        cargarNotificacionesRecientes(token);
 
     } catch (error) {
         console.error("No se pudo comprobar la sesión:", error);

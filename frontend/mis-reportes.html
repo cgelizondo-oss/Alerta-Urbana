@@ -58,9 +58,10 @@
                     <span>Mascotas perdidas</span>
                 </a>
 
-                <a href="login.html" class="nav-link" data-requiere-sesion>
+                <a href="notificaciones.html" class="nav-link" data-requiere-sesion>
                     <span class="nav-icon" aria-hidden="true">🔔</span>
                     <span>Notificaciones</span>
+                    <span id="contadorNotificaciones" class="contador-notificaciones" hidden></span>
                 </a>
 
             </nav>
@@ -74,9 +75,18 @@
 
         <main class="main-content">
 
+
             <header class="topbar">
                 <h1>Mis reportes</h1>
+
+                <!-- Campana de notificaciones para celulares -->
+                <a href="notificaciones.html" class="campana-notificaciones-mobile" id="campanaNotificacionesMobile"
+                    aria-label="Ver notificaciones" hidden>
+                    🔔
+                    <span class="contador-campana-mobile" id="contadorCampanaMobile"></span>
+                </a>
             </header>
+
 
             <!-- LISTADO DE MIS REPORTES -->
             <section class="content-card" aria-labelledby="tituloMisReportes">
@@ -100,19 +110,19 @@
     </div>
 
     <!-- PIE DE PÁGINA -->
-<footer class="footer">
-    <div class="footer-info">
-        <strong>Alerta Urbana</strong>
-        <p>
-            Una plataforma para reportar y consultar
-            problemáticas de tu ciudad.
-        </p>
-    </div>
+    <footer class="footer">
+        <div class="footer-info">
+            <strong>Alerta Urbana</strong>
+            <p>
+                Una plataforma para reportar y consultar
+                problemáticas de tu ciudad.
+            </p>
+        </div>
 
-    <p class="footer-copy">
-        &copy; 2026 Alerta Urbana. Proyecto académico.
-    </p>
-</footer>
+        <p class="footer-copy">
+            &copy; 2026 Alerta Urbana. Proyecto académico.
+        </p>
+    </footer>
 </body>
 
 </html>

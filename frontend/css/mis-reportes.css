@@ -169,3 +169,26 @@
     outline: 3px solid #93c5fd;
     outline-offset: 3px;
 }
+
+
+/* Contador de notificaciones sin leer */
+.contador-notificaciones {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    margin-left: auto;
+    border-radius: 999px;
+    background-color: #dc2626;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Ocultar el contador cuando no hay notificaciones */
+.contador-notificaciones[hidden] {
+    display: none;
+}

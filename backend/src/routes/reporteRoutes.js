@@ -3,6 +3,7 @@ const pool = require("../config/db");
 const { verificarToken } = require("../middlewares/authMiddleware");
 const upload = require("../config/multer");
 const fs = require("fs");
+const { notificarCambioEstado } = require("../services/notificacionService");
 
 const router = express.Router();
 
@@ -46,6 +47,13 @@ async function abandonarReportesInactivos() {
                     null,
                     "Reporte marcado automáticamente como abandonado por 30 días sin actividad."
                 ]
+            );
+
+            // Notificar al creador y a los ciudadanos sumados
+            await notificarCambioEstado(
+                client,
+                reporte.id_reporte,
+                "Abandonado"
             );
         }
 
@@ -232,8 +240,8 @@ router.post("/", verificarToken, upload.single("imagen"), async (req, res) => {
                 "SELECT pg_advisory_xact_lock($1, $2)",
                 [2026, Number(id_tipo)]
             );
-            
-             // Buscar incidencias activas similares a menos de 30 metros
+
+            // Buscar incidencias activas similares a menos de 30 metros
             const similares = await client.query(
                 `SELECT
                     r.id_reporte,
@@ -933,6 +941,13 @@ router.patch("/:id/resolver", verificarToken, async (req, res) => {
              SET id_estado = $1
              WHERE id_reporte = $2`,
             [4, id_reporte]
+        );
+
+        // Notificar al creador y a los ciudadanos sumados
+        await notificarCambioEstado(
+            client,
+            id_reporte,
+            "Resuelto"
         );
 
         // Registrar el cambio en el historial

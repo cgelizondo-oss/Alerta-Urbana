@@ -13,6 +13,65 @@ if (!idReporte || !/^[1-9]\d*$/.test(idReporte)) {
     cargarHistorialReporte(idReporte);
 }
 
+
+
+async function actualizarContadorNotificaciones(token) {
+    const contador = document.getElementById("contadorNotificaciones");
+    const campanaMobile = document.getElementById("campanaNotificacionesMobile");
+    const contadorMobile = document.getElementById("contadorCampanaMobile");
+
+    // Ocultar inicialmente los contadores
+    if (contador) {
+        contador.hidden = true;
+        contador.textContent = "";
+    }
+
+    if (campanaMobile) {
+        campanaMobile.hidden = true;
+    }
+
+    if (contadorMobile) {
+        contadorMobile.textContent = "";
+    }
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/notificaciones/sin-leer",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        if (cantidad > 0) {
+            const textoCantidad = cantidad > 9 ? "10+" : String(cantidad);
+
+            // Contador del menú lateral
+            if (contador) {
+                contador.textContent = textoCantidad;
+                contador.hidden = false;
+            }
+
+            // Campana del encabezado móvil
+            if (campanaMobile && contadorMobile) {
+                contadorMobile.textContent = textoCantidad;
+                campanaMobile.hidden = false;
+            }
+        }
+
+    } catch (error) {
+        console.error("Error al consultar notificaciones:", error);
+    }
+}
+
+
+
 // Consultar la información de un reporte
 async function cargarDetalleReporte(id) {
     const token = localStorage.getItem("token");
@@ -44,6 +103,8 @@ async function cargarDetalleReporte(id) {
         }
 
         const datos = await respuesta.json();
+
+        actualizarContadorNotificaciones(token);
 
         console.log("Detalle del reporte:", datos.reporte);
 

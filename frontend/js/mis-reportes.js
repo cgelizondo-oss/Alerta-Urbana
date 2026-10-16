@@ -123,3 +123,67 @@ menuToggle.addEventListener("click", () => {
 
     menuToggle.textContent = estaAbierto ? "✕" : "☰";
 });
+
+
+
+async function actualizarContadorNotificaciones() {
+    const contador = document.getElementById("contadorNotificaciones");
+    const campanaMobile = document.getElementById("campanaNotificacionesMobile");
+    const contadorMobile = document.getElementById("contadorCampanaMobile");
+
+    // Ocultar los contadores inicialmente
+    if (contador) {
+        contador.hidden = true;
+        contador.textContent = "";
+    }
+
+    if (campanaMobile) {
+        campanaMobile.hidden = true;
+    }
+
+    if (contadorMobile) {
+        contadorMobile.textContent = "";
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/notificaciones/sin-leer",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        if (cantidad > 0) {
+            const textoCantidad = cantidad > 9 ? "10+" : String(cantidad);
+
+            // Contador del menú lateral
+            if (contador) {
+                contador.textContent = textoCantidad;
+                contador.hidden = false;
+            }
+
+            // Campana móvil
+            if (campanaMobile && contadorMobile) {
+                contadorMobile.textContent = textoCantidad;
+                campanaMobile.hidden = false;
+            }
+        }
+
+    } catch (error) {
+        console.error("Error al consultar notificaciones:", error);
+    }
+}
+
+
+actualizarContadorNotificaciones();
