@@ -265,6 +265,204 @@ cargarReportesMapa();
 
 
 // =========================
+// CARGAR MASCOTAS PERDIDAS
+// =========================
+
+let marcadoresMascotas = [];
+
+
+async function contactarDueno(idMascota, boton) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    boton.disabled = true;
+    boton.textContent = "Abriendo chat...";
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/chat-mascotas/conversaciones",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    id_mascota: idMascota
+                })
+            }
+        );
+
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok) {
+            throw new Error(
+                resultado.mensaje || "No se pudo iniciar la conversación."
+            );
+        }
+
+        const conversacion = resultado.conversacion
+            || resultado.conversacion_mascota
+            || resultado;
+
+        if (!conversacion.id_conversacion) {
+            throw new Error(
+                "El servidor no devolvió el ID de la conversación."
+            );
+        }
+
+        window.location.href =
+            `chats.html?conversacion=${conversacion.id_conversacion}`;
+
+    } catch (error) {
+        console.error("Error al iniciar el chat:", error);
+        alert(error.message || "No se pudo iniciar el chat.");
+
+        boton.disabled = false;
+        boton.textContent = "💬 Contactar al dueño";
+    }
+}
+
+
+async function cargarMascotasMapa() {
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/mascotas"
+        );
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudieron cargar las mascotas perdidas");
+        }
+
+        const mascotas = await respuesta.json();
+
+        mascotas.forEach((mascota) => {
+            const latitud = Number(mascota.latitud);
+            const longitud = Number(mascota.longitud);
+
+            // No mostrar mascotas sin coordenadas válidas
+            if (
+                mascota.latitud == null ||
+                mascota.latitud === "" ||
+                mascota.longitud == null ||
+                mascota.longitud === "" ||
+                !Number.isFinite(latitud) ||
+                !Number.isFinite(longitud) ||
+                latitud < -90 ||
+                latitud > 90 ||
+                longitud < -180 ||
+                longitud > 180
+            ) {
+                return;
+            }
+
+            // Crear un marcador para la mascota
+            const iconoMascota = L.divIcon({
+                className: "marcador-mascota",
+                html: '<span aria-hidden="true">🐾</span>',
+                iconSize: [38, 38],
+                iconAnchor: [19, 19],
+                popupAnchor: [0, -18]
+            });
+
+            const marcador = L.marker([latitud, longitud], {
+                icon: iconoMascota
+            }).addTo(mapaIncidencias);
+            // Crear la información emergente
+            const tarjeta = document.createElement("div");
+            tarjeta.className = "popup-incidencia";
+
+            const titulo = document.createElement("h3");
+            titulo.textContent = `🐾 ${mascota.nombre || "Mascota perdida"}`;
+
+            const tipo = document.createElement("p");
+            tipo.textContent = `Animal: ${mascota.tipo_animal || "No especificado"}`;
+
+            const estado = document.createElement("p");
+            estado.textContent = `Estado: ${mascota.estado || "No especificado"}`;
+
+            const descripcion = document.createElement("p");
+            descripcion.textContent = `Descripción: ${mascota.descripcion || "Sin descripción"}`;
+
+            const ubicacion = document.createElement("p");
+            ubicacion.textContent = `Última ubicación: ${mascota.ubicacion || "No especificada"}`;
+
+            const fecha = document.createElement("p");
+            fecha.textContent = `Fecha de pérdida: ${mascota.fecha_perdida
+                ? new Date(`${String(mascota.fecha_perdida).slice(0, 10)}T12:00:00`).toLocaleDateString("es-AR")
+                : "No especificada"
+                }`;
+
+
+            tarjeta.append(
+                titulo,
+                tipo,
+                estado,
+                descripcion,
+                ubicacion,
+                fecha
+            );
+
+            const btnContactar = document.createElement("button");
+            btnContactar.type = "button";
+            btnContactar.className = "popup-ver-detalle";
+            btnContactar.textContent = "💬 Contactar al dueño";
+
+            btnContactar.addEventListener("click", () => {
+                contactarDueno(mascota.id_mascota, btnContactar);
+            });
+
+            tarjeta.appendChild(btnContactar);
+
+
+            // Mostrar la foto si la mascota tiene una
+            if (mascota.foto) {
+                const imagen = document.createElement("img");
+                imagen.src = `http://localhost:3000${mascota.foto}`;
+                imagen.alt = `Foto de ${mascota.nombre || "la mascota"}`;
+                imagen.style.width = "100%";
+                imagen.style.maxWidth = "220px";
+                imagen.style.maxHeight = "160px";
+                imagen.style.objectFit = "cover";
+                imagen.style.borderRadius = "8px";
+
+                tarjeta.insertBefore(imagen, tipo);
+            }
+
+            marcador.bindPopup(tarjeta, {
+                maxWidth: 280,
+                className: "popup-incidencia"
+            });
+
+            marcadoresMascotas.push({
+                mascota,
+                marcador
+            });
+        });
+
+        console.log(
+            "Marcadores de mascotas creados:",
+            marcadoresMascotas.length
+        );
+
+    } catch (error) {
+        console.error(
+            "Error al cargar las mascotas en el mapa:",
+            error
+        );
+    }
+}
+
+
+cargarMascotasMapa();
+
+
+
+// =========================
 // SESIÓN DEL USUARIO
 // =========================
 
@@ -331,14 +529,51 @@ async function actualizarContadorNotificaciones(token) {
 }
 
 
+/* =========================
+   CONTADOR DE MENSAJES SIN LEER
+========================= */
+
+async function actualizarContadorMensajes(token) {
+    const contador = document.getElementById("contadorMensajes");
+
+    if (!contador) return;
+
+    if (!token) {
+        contador.hidden = true;
+        contador.textContent = "";
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/chat-mascotas/no-leidos",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        contador.textContent = cantidad > 9 ? "10+" : String(cantidad);
+        contador.hidden = cantidad === 0;
+
+    } catch (error) {
+        console.error("Error al consultar mensajes sin leer:", error);
+    }
+}
+
 
 async function verificarSesionMapa() {
     const token = localStorage.getItem("token");
 
-    // Si no hay sesión, mostrar opciones de visitante
+    // Si no hay sesión, redirigir al login
     if (!token) {
-        accionesVisitante.hidden = false;
-        perfilUsuario.hidden = true;
+        window.location.href = "login.html?motivo=reporte";
         return;
     }
 
@@ -352,12 +587,13 @@ async function verificarSesionMapa() {
             }
         );
 
+        console.log("Estado de validación:", respuesta.status);
+
         if (respuesta.status === 401 || respuesta.status === 403) {
             localStorage.removeItem("token");
             localStorage.removeItem("usuario");
 
-            accionesVisitante.hidden = false;
-            perfilUsuario.hidden = true;
+            window.location.href = "login.html?motivo=reporte";
             return;
         }
 
@@ -370,8 +606,14 @@ async function verificarSesionMapa() {
 
         accionesVisitante.hidden = true;
         perfilUsuario.hidden = false;
+
         nombreUsuario.textContent = usuario.nombre || "Usuario";
+
         actualizarContadorNotificaciones(token);
+
+        actualizarContadorMensajes(token);
+        setInterval(() => actualizarContadorMensajes(token), 15000);
+
 
     } catch (error) {
         console.error("Error al verificar la sesión:", error);
@@ -571,9 +813,15 @@ centrarMapaEnUsuario();
 // LISTADO DE REPORTES DEL MAPA
 // =========================
 
-function mostrarListadoReportes(reportes) {
 
-    // Limpiar el contenido anterior
+function mostrarListadoReportes(reportes) {
+    const tituloListado = document.getElementById("tituloListadoMapa");
+
+    if (tituloListado) {
+        tituloListado.textContent = "Reportes en el mapa";
+    }
+
+    // Limpiar el listado anterior
     listaReportesMapa.replaceChildren();
 
     if (reportes.length === 0) {
@@ -586,7 +834,6 @@ function mostrarListadoReportes(reportes) {
     }
 
     reportes.forEach((reporte) => {
-
         const tarjeta = document.createElement("article");
         tarjeta.className = "tarjeta-reporte-mapa";
 
@@ -603,7 +850,6 @@ function mostrarListadoReportes(reportes) {
         fecha.textContent =
             `Fecha: ${new Date(reporte.fecha_creacion).toLocaleDateString("es-AR")}`;
 
-        // Botón para localizar la incidencia en el mapa
         const btnVerEnMapa = document.createElement("button");
         btnVerEnMapa.type = "button";
         btnVerEnMapa.className = "enlace-reporte-mapa";
@@ -611,20 +857,15 @@ function mostrarListadoReportes(reportes) {
 
         btnVerEnMapa.addEventListener("click", () => {
             const elemento = marcadoresReportes.find(
-                (item) => Number(item.reporte.id_reporte) === Number(reporte.id_reporte)
+                (item) =>
+                    Number(item.reporte.id_reporte) === Number(reporte.id_reporte)
             );
 
             if (!elemento) return;
 
-            const { marcador } = elemento;
+            mapaIncidencias.setView(elemento.marcador.getLatLng(), 17);
+            elemento.marcador.openPopup();
 
-            // Centrar el mapa en la incidencia
-            mapaIncidencias.setView(marcador.getLatLng(), 17);
-
-            // Abrir la información del reporte
-            marcador.openPopup();
-
-            // Desplazarse hasta el mapa
             document.getElementById("mapaIncidencias").scrollIntoView({
                 behavior: "smooth",
                 block: "center"
@@ -632,7 +873,6 @@ function mostrarListadoReportes(reportes) {
         });
 
         const ciudadanos = document.createElement("p");
-
         const totalCiudadanos = Number(reporte.total_ciudadanos) || 1;
 
         ciudadanos.textContent =
@@ -662,6 +902,118 @@ function mostrarListadoReportes(reportes) {
 }
 
 
+// =========================
+// LISTADO DE MASCOTAS PERDIDAS
+// =========================
+
+function mostrarListadoMascotas() {
+    const tituloListado = document.getElementById("tituloListadoMapa");
+
+    if (tituloListado) {
+        tituloListado.textContent = "Mascotas perdidas en el mapa";
+    }
+
+    listaReportesMapa.replaceChildren();
+
+    if (marcadoresMascotas.length === 0) {
+        const mensaje = document.createElement("p");
+        mensaje.className = "empty-message";
+        mensaje.textContent =
+            "No hay mascotas perdidas con ubicación disponible para mostrar.";
+
+        listaReportesMapa.appendChild(mensaje);
+        return;
+    }
+
+    marcadoresMascotas.forEach(({ mascota, marcador }) => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "tarjeta-reporte-mapa tarjeta-mascota-mapa";
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = `🐾 ${mascota.nombre || "Mascota perdida"}`;
+
+        if (mascota.foto) {
+            const imagen = document.createElement("img");
+            imagen.src = `http://localhost:3000${mascota.foto}`;
+            imagen.alt = `Foto de ${mascota.nombre || "la mascota"}`;
+            imagen.loading = "lazy";
+            imagen.style.width = "100%";
+            imagen.style.maxWidth = "240px";
+            imagen.style.maxHeight = "180px";
+            imagen.style.objectFit = "cover";
+            imagen.style.borderRadius = "8px";
+            imagen.style.marginBottom = "12px";
+
+            tarjeta.appendChild(titulo);
+            tarjeta.appendChild(imagen);
+        } else {
+            tarjeta.appendChild(titulo);
+        }
+
+        const tipo = document.createElement("p");
+        tipo.textContent = `Animal: ${mascota.tipo_animal || "No especificado"}`;
+
+        const estado = document.createElement("p");
+        estado.textContent = `Estado: ${mascota.estado || "No especificado"}`;
+
+        const ubicacion = document.createElement("p");
+        ubicacion.textContent =
+            `Última ubicación: ${mascota.ubicacion || "No especificada"}`;
+
+        const fecha = document.createElement("p");
+        fecha.textContent = `Fecha de pérdida: ${mascota.fecha_perdida
+            ? new Date(
+                `${String(mascota.fecha_perdida).slice(0, 10)}T12:00:00`
+            ).toLocaleDateString("es-AR")
+            : "No especificada"
+            }`;
+
+        const descripcion = document.createElement("p");
+        descripcion.textContent =
+            `Descripción: ${mascota.descripcion || "Sin descripción"}`;
+
+        const btnVerEnMapa = document.createElement("button");
+        btnVerEnMapa.type = "button";
+        btnVerEnMapa.className = "enlace-reporte-mapa";
+        btnVerEnMapa.textContent = "📍 Ver en el mapa";
+
+        btnVerEnMapa.addEventListener("click", () => {
+            mapaIncidencias.setView(marcador.getLatLng(), 17);
+            marcador.openPopup();
+
+            document.getElementById("mapaIncidencias").scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        });
+
+
+        const btnContactar = document.createElement("button");
+        btnContactar.type = "button";
+        btnContactar.className = "enlace-reporte-mapa";
+        btnContactar.textContent = "💬 Contactar al dueño";
+
+        btnContactar.addEventListener("click", () => {
+            contactarDueno(mascota.id_mascota, btnContactar);
+        });
+
+        tarjeta.append(
+            tipo,
+            estado,
+            ubicacion,
+            fecha,
+            descripcion,
+            btnVerEnMapa,
+            btnContactar
+        );
+
+
+        listaReportesMapa.appendChild(tarjeta);
+    });
+}
+
+
+
 // Menú hamburguesa para dispositivos móviles
 const menuToggle = document.getElementById("menuToggle");
 const menuMobile = document.getElementById("menuMobile");
@@ -673,3 +1025,35 @@ if (menuToggle && menuMobile) {
         menuToggle.setAttribute("aria-expanded", String(estaAbierto));
     });
 }
+
+
+// =========================
+// PESTAÑAS DEL LISTADO
+// =========================
+
+const btnPestanaReportes = document.getElementById("btnPestanaReportes");
+const btnPestanaMascotas = document.getElementById("btnPestanaMascotas");
+
+function activarPestana(tipo) {
+    const mostrarMascotas = tipo === "mascotas";
+
+    btnPestanaReportes.classList.toggle("activa", !mostrarMascotas);
+    btnPestanaMascotas.classList.toggle("activa", mostrarMascotas);
+
+    btnPestanaReportes.setAttribute("aria-pressed", String(!mostrarMascotas));
+    btnPestanaMascotas.setAttribute("aria-pressed", String(mostrarMascotas));
+
+    if (mostrarMascotas) {
+        mostrarListadoMascotas();
+    } else {
+        aplicarFiltrosMapa();
+    }
+}
+
+btnPestanaReportes.addEventListener("click", () => {
+    activarPestana("reportes");
+});
+
+btnPestanaMascotas.addEventListener("click", () => {
+    activarPestana("mascotas");
+});

@@ -1,7 +1,40 @@
 
+
 const API_NOTIFICACIONES = "http://localhost:3000/api/notificaciones";
+const API_USUARIOS_URL = "http://localhost:3000/api/usuarios";
 
 const listaNotificaciones = document.getElementById("listaNotificaciones");
+
+async function protegerNotificaciones() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        window.location.href = "login.html?motivo=reporte";
+        return false;
+    }
+
+    try {
+        const respuesta = await fetch(`${API_USUARIOS_URL}/perfil`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!respuesta.ok) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuario");
+            window.location.href = "login.html?motivo=reporte";
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Error al verificar la sesión:", error);
+        window.location.href = "login.html?motivo=reporte";
+        return false;
+    }
+}
+
 
 async function cargarNotificaciones() {
     const token = localStorage.getItem("token");
@@ -234,8 +267,52 @@ async function actualizarContadorNotificaciones() {
     }
 }
 
+async function actualizarContadorMensajes() {
+    const contador = document.getElementById("contadorMensajes");
+    const token = localStorage.getItem("token");
 
-cargarNotificaciones();
+    if (!contador) return;
+
+    if (!token) {
+        contador.hidden = true;
+        contador.textContent = "";
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/chat-mascotas/no-leidos",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        contador.textContent = cantidad > 9 ? "10+" : String(cantidad);
+        contador.hidden = cantidad === 0;
+
+    } catch (error) {
+        console.error("Error al consultar mensajes sin leer:", error);
+    }
+}
+
+(async () => {
+    const sesionValida = await protegerNotificaciones();
+
+    if (!sesionValida) return;
+
+    await cargarNotificaciones();
+
+    actualizarContadorMensajes();
+    setInterval(actualizarContadorMensajes, 15000);
+})();
+
 
 
 /* =========================

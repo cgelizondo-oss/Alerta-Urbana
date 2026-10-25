@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chats | Alerta Urbana</title>
+
+    <link rel="stylesheet" href="css/inicio.css">
+    <link rel="stylesheet" href="css/chats.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- MENÚ LATERAL -->
+        <aside class="sidebar">
+
+            <button type="button" class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menú de navegación"
+                aria-expanded="false"
+                aria-controls="menuMobile">
+                ☰
+            </button>
+
+            <div class="sidebar-logo">
+                <a href="inicio.html" class="sidebar-logo"
+                    aria-label="Ir al inicio de Alerta Urbana">
+                    <img src="assets/logo-alerta-urbana.png" alt="">
+                    <span>ALERTA<br>URBANA</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav" id="menuMobile"
+                aria-label="Menú principal">
+
+                <a href="inicio.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🏠</span>
+                    <span>Inicio</span>
+                </a>
+
+                <a href="crear-reporte.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">➕</span>
+                    <span>Crear reporte</span>
+                </a>
+
+                <a href="ver-mapa.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🗺️</span>
+                    <span>Ver mapa</span>
+                </a>
+
+                <a href="mascotas-perdidas.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">🐾</span>
+                    <span>Mascotas perdidas</span>
+                </a>
+
+                <a href="chats.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">💬</span>
+                    <span>Mensajes</span>
+                    <span id="contadorMensajes" class="contador-mensajes" hidden>0</span>
+                </a>
+
+                <a href="notificaciones.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">🔔</span>
+                    <span>Notificaciones</span>
+                    <span id="contadorNotificaciones" class="contador-notificaciones" hidden></span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="#" class="nav-link">Configuración</a>
+                <a href="#" class="nav-link">Ayuda</a>
+            </div>
+
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <h1>Chats</h1>
+
+                <div class="auth-actions" id="accionesVisitante">
+                    <a href="registro.html" class="btn-register">
+                        Registrarse
+                    </a>
+                    <a href="login.html" class="btn-login">
+                        Iniciar sesión
+                    </a>
+                </div>
+
+                <div class="user-profile" id="perfilUsuario" hidden>
+                    <div class="user-avatar" aria-hidden="true"></div>
+                    <span id="nombreUsuario">Usuario</span>
+
+                    <button type="button" class="btn-logout"
+                        id="btnCerrarSesion">
+                        Cerrar sesión
+                    </button>
+                </div>
+            </header>
+
+            <section class="chat-intro">
+                <h2>Tus conversaciones</h2>
+                <p>
+                    Contactate con otros ciudadanos para ayudar
+                    a encontrar mascotas perdidas.
+                </p>
+            </section>
+
+            <!-- PANEL DE CONVERSACIONES Y MENSAJES -->
+            <section class="chat-layout">
+
+                <aside class="conversaciones-panel">
+                    <div class="conversaciones-titulo">
+                        <h2>Mensajes</h2>
+                    </div>
+
+                    <div id="listaConversaciones"
+                        class="lista-conversaciones">
+                        <p class="estado-chat">
+                            Iniciá sesión para ver tus conversaciones.
+                        </p>
+                    </div>
+                </aside>
+
+                <section class="chat-panel">
+
+                    <div id="chatVacio" class="chat-vacio">
+                        <span class="chat-vacio-icono"
+                            aria-hidden="true">💬</span>
+                        <h2>¡Tus chats, en un solo lugar!</h2>
+                        <p>
+                            Seleccioná una conversación para leer
+                            y enviar mensajes.
+                        </p>
+                    </div>
+
+                    <div id="chatActivo" class="chat-activo" hidden>
+
+                        <header class="chat-encabezado">
+                            <div>
+                                <h2 id="nombreContacto"></h2>
+                                <p id="nombreMascotaChat"></p>
+                            </div>
+                        </header>
+
+                        <div id="mensajesChat" class="mensajes-chat"
+                            aria-live="polite"></div>
+
+                        <form id="formMensaje" class="form-mensaje">
+                            <input type="text"
+                                id="contenidoMensaje"
+                                placeholder="Escribí un mensaje..."
+                                maxlength="5000"
+                                autocomplete="off"
+                                required>
+
+                            <button type="submit">Enviar</button>
+                        </form>
+
+                    </div>
+
+                </section>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-info">
+            <strong>Alerta Urbana</strong>
+            <p>
+                Una plataforma para reportar y consultar
+                problemáticas de tu ciudad.
+            </p>
+        </div>
+
+        <p class="footer-copy">
+            &copy; 2026 Alerta Urbana. Proyecto académico.
+        </p>
+    </footer>
+
+    <script src="js/chats.js"></script>
+</body>
+
+</html>

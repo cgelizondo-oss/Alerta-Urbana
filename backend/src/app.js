@@ -7,6 +7,8 @@ const reporteRoutes = require("./routes/reporteRoutes");
 const notificacionRoutes = require("./routes/notificacionRoutes");
 const { revisarReportesInactivos } = reporteRoutes;
 const path = require("path");
+const mascotaRoutes = require("./routes/mascotaRoutes");
+const chatMascotasRoutes = require("./routes/chatMascotasRoutes");
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/tipos-incidencia", tipoIncidenciaRoutes);
 app.use("/api/reportes", reporteRoutes);
 app.use("/api/notificaciones", notificacionRoutes);
+app.use("/api/mascotas", mascotaRoutes);
+app.use("/api/chat-mascotas", chatMascotasRoutes);
 
 async function probarConexion() {
     try{

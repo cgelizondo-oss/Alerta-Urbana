@@ -326,6 +326,43 @@ async function actualizarContadorNotificaciones(token) {
 }
 
 
+async function actualizarContadorMensajes(token) {
+    const contador = document.getElementById("contadorMensajes");
+
+    if (!contador) return;
+
+    contador.hidden = true;
+    contador.textContent = "";
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/chat-mascotas/no-leidos",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) {
+            return;
+        }
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        if (cantidad > 0) {
+            contador.textContent = cantidad > 9 ? "10+" : cantidad;
+            contador.hidden = false;
+        }
+
+    } catch (error) {
+        console.error("Error al consultar mensajes sin leer:", error);
+    }
+}
+
+
+
 // Comprobar la sesión con el backend
 async function comprobarSesion() {
     mostrarVisitante();
@@ -362,6 +399,7 @@ async function comprobarSesion() {
         mostrarUsuario(usuario);
         cargarReportesRecientes(token);
         actualizarContadorNotificaciones(token);
+        actualizarContadorMensajes(token);
         cargarNotificacionesRecientes(token);
 
     } catch (error) {

@@ -166,6 +166,41 @@ async function actualizarContadorNotificaciones(token) {
 }
 
 
+/* CONTADOR DE MENSAJES SIN LEER */
+async function actualizarContadorMensajes(token) {
+    const contador = document.getElementById("contadorMensajes");
+
+    if (!contador) return;
+
+    if (!token) {
+        contador.hidden = true;
+        contador.textContent = "";
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/chat-mascotas/no-leidos",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        contador.textContent = cantidad > 9 ? "10+" : String(cantidad);
+        contador.hidden = cantidad === 0;
+
+    } catch (error) {
+        console.error("Error al consultar mensajes sin leer:", error);
+    }
+}
+
 
 async function protegerCrearReporte() {
     const token = localStorage.getItem("token");
@@ -209,6 +244,8 @@ async function protegerCrearReporte() {
         perfilUsuario.hidden = false;
         nombreUsuario.textContent = usuario.nombre || "Usuario";
         actualizarContadorNotificaciones(token);
+        actualizarContadorMensajes(token);
+        setInterval(() => actualizarContadorMensajes(token), 15000);
 
     } catch (error) {
         console.error("Error al verificar la sesión:", error);
@@ -572,7 +609,6 @@ function mostrarIncidenciasSimilares(similares) {
     });
 }
 
-
 formCrearReporte.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -616,7 +652,6 @@ formCrearReporte.addEventListener("submit", async (event) => {
             window.location.href = "login.html?motivo=reporte";
             return;
         }
-
 
         // Comprobar si ya existen incidencias similares
         const idTipoSeleccionado =

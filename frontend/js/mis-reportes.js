@@ -1,6 +1,38 @@
+
 const API_REPORTES = "http://localhost:3000/api/reportes/mis-reportes";
+const API_USUARIOS_URL = "http://localhost:3000/api/usuarios";
 
 const listaMisReportes = document.getElementById("listaMisReportes");
+
+async function protegerMisReportes() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        window.location.href = "login.html?motivo=reporte";
+        return false;
+    }
+
+    try {
+        const respuesta = await fetch(`${API_USUARIOS_URL}/perfil`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!respuesta.ok) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("usuario");
+            window.location.href = "login.html?motivo=reporte";
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Error al verificar la sesión:", error);
+        window.location.href = "login.html?motivo=reporte";
+        return false;
+    }
+}
 
 async function cargarMisReportes() {
     const token = localStorage.getItem("token");
@@ -97,7 +129,13 @@ async function cargarMisReportes() {
     }
 }
 
-cargarMisReportes();
+(async () => {
+    const sesionValida = await protegerMisReportes();
+
+    if (!sesionValida) return;
+
+    await cargarMisReportes();
+})();
 
 /* =========================
    MENÚ MÓVIL
@@ -187,3 +225,46 @@ async function actualizarContadorNotificaciones() {
 
 
 actualizarContadorNotificaciones();
+
+
+/* =========================
+   CONTADOR DE MENSAJES SIN LEER
+========================= */
+
+async function actualizarContadorMensajes() {
+    const contador = document.getElementById("contadorMensajes");
+    const token = localStorage.getItem("token");
+
+    if (!contador) return;
+
+    if (!token) {
+        contador.hidden = true;
+        contador.textContent = "";
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(
+            "http://localhost:3000/api/chat-mascotas/no-leidos",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const cantidad = Number(datos.cantidad) || 0;
+
+        contador.textContent = cantidad > 9 ? "10+" : String(cantidad);
+        contador.hidden = cantidad === 0;
+
+    } catch (error) {
+        console.error("Error al consultar mensajes sin leer:", error);
+    }
+}
+
+actualizarContadorMensajes();
+setInterval(actualizarContadorMensajes, 15000);

@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mascotas perdidas | Alerta Urbana</title>
+
+    <link rel="stylesheet" href="css/inicio.css">
+    <link rel="stylesheet" href="css/mascotas-perdidas.css">
+    <link rel="stylesheet" href="css/notificaciones.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="js/mascotas-perdidas.js" defer></script>
+
+</head>
+
+
+<body>
+    <div class="app-container">
+
+        <aside class="sidebar">
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menÃº de navegaciÃ³n"
+                aria-expanded="false" aria-controls="menuMobile">â˜°</button>
+
+            <div class="sidebar-logo">
+                <a href="inicio.html" aria-label="Ir al inicio de Alerta Urbana">
+                    <img src="assets/logo-alerta-urbana.png" alt="">
+                    <span>ALERTA<br>URBANA</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav" id="menuMobile" aria-label="MenÃº principal">
+                <a href="inicio.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">ðŸ </span>
+                    <span>Inicio</span>
+                </a>
+
+                <a href="crear-reporte.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">âž•</span>
+                    <span>Crear reporte</span>
+                </a>
+
+                <a href="mis-reportes.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">ðŸ“‹</span>
+                    <span>Mis reportes</span>
+                </a>
+
+                <a href="ver-mapa.html" class="nav-link">
+                    <span class="nav-icon" aria-hidden="true">ðŸ—ºï¸</span>
+                    <span>Ver mapa</span>
+                </a>
+
+                <a href="mascotas-perdidas.html" class="nav-link active" aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">ðŸ¾</span>
+                    <span>Mascotas perdidas</span>
+                </a>
+
+                <a href="chats.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">ðŸ’¬</span>
+                    <span>Mensajes</span>
+                    <span id="contadorMensajes" class="contador-mensajes" hidden>0</span>
+                </a>
+
+                <a href="notificaciones.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">ðŸ””</span>
+                    <span>Notificaciones</span>
+                    <span id="contadorNotificaciones" class="contador-notificaciones" hidden></span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="#" class="nav-link">ConfiguraciÃ³n</a>
+                <a href="#" class="nav-link">Ayuda</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h1>Mascotas perdidas</h1>
+
+                <a href="notificaciones.html" class="campana-notificaciones-mobile" id="campanaNotificacionesMobile"
+                    aria-label="Ver notificaciones" hidden>
+                    ðŸ””
+                    <span class="contador-campana-mobile" id="contadorCampanaMobile"></span>
+                </a>
+
+                <div class="auth-actions" id="accionesVisitante">
+                    <a href="registro.html" class="btn-register">Registrarse</a>
+                    <a href="login.html" class="btn-login" id="btnIniciarSesion">Iniciar sesiÃ³n</a>
+                </div>
+
+                <div class="user-profile" id="perfilUsuario" hidden>
+                    <div class="user-avatar" aria-hidden="true"></div>
+                    <span id="nombreUsuario">Usuario</span>
+                    <button type="button" class="btn-logout" id="btnCerrarSesion">Cerrar sesiÃ³n</button>
+                </div>
+            </header>
+
+            <section class="mascotas-section">
+                <div class="mascotas-encabezado">
+                    <div>
+                        <h2>Mascotas perdidas</h2>
+                        <p>Ayudanos a reunir a las mascotas con sus familias.</p>
+                    </div>
+
+                    <button type="button" id="btnMostrarFormulario" class="btn-publicar-mascota">
+                        + Publicar mascota
+                    </button>
+                </div>
+
+                <div id="formularioContenedor" hidden>
+                    <h2>Publicar mascota perdida</h2>
+
+                    <form id="formMascota" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="nombre">Nombre de la mascota</label>
+                            <input type="text" id="nombre" name="nombre" maxlength="100" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tipo_animal">Tipo de animal</label>
+                            <select id="tipo_animal" name="tipo_animal" required>
+                                <option value="" selected disabled>
+                                    SeleccionÃ¡ un tipo
+                                </option>
+                                <option value="Perro">Perro</option>
+                                <option value="Gato">Gato</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descripcion">DescripciÃ³n</label>
+                            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ãšltima ubicaciÃ³n conocida</label>
+                            <p>HacÃ© clic en el mapa para marcar dÃ³nde se perdiÃ³ la mascota.</p>
+
+                            <div id="mapaMascota" style="height: 350px; width: 100%; border-radius: 10px;"></div>
+
+                            <input type="text" id="ubicacion" name="ubicacion"
+                                placeholder="La direcciÃ³n se completarÃ¡ al marcar el mapa" required readonly>
+
+                            <input type="hidden" id="latitudMascota" name="latitud">
+                            <input type="hidden" id="longitudMascota" name="longitud">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fecha_perdida">Fecha de pÃ©rdida</label>
+                            <input type="date" id="fecha_perdida" name="fecha_perdida" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="datos_contacto">Datos de contacto</label>
+                            <input type="text" id="datos_contacto" name="datos_contacto">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagen">Foto de la mascota (opcional)</label>
+
+                            <div class="contenedor-imagen">
+                                <label for="imagen" class="zona-imagen">
+                                    <span class="icono-imagen">ðŸ“·</span>
+                                    <span class="texto-imagen">SeleccionÃ¡ una foto</span>
+                                    <small>JPG, PNG o WebP Â· MÃ¡ximo 5 MB</small>
+                                </label>
+
+                                <input type="file" id="imagen" name="imagen" accept="image/jpeg,image/png,image/webp">
+
+                                <div id="vistaPreviaContenedor" class="vista-previa-contenedor" hidden>
+                                    <img id="vistaPreviaImagen" src="" alt="Vista previa de la mascota">
+                                    <button type="button" id="quitarImagen">Quitar foto</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-publicar-mascota">
+                                Publicar
+                            </button>
+                            <button type="button" id="btnCancelarFormulario">
+                                Cancelar
+                            </button>
+                        </div>
+
+                        <p id="mensajeMascota" role="status" aria-live="polite" hidden></p>
+                    </form>
+                </div>
+
+                <div id="listaMascotas" class="lista-mascotas">
+                    <p>Cargando publicaciones...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-info">
+            <strong>Alerta Urbana</strong>
+            <p>Una plataforma para reportar y consultar problemÃ¡ticas de tu ciudad.</p>
+        </div>
+        <p class="footer-copy">
+            &copy; 2026 Alerta Urbana. Proyecto acadÃ©mico.
+        </p>
+    </footer>
+</body>
+
+</html>

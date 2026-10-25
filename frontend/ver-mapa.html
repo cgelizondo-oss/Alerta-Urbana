@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="css/inicio.css">
     <link rel="stylesheet" href="css/ver-mapa.css">
+    <link rel="stylesheet" href="css/notificaciones.css">
 
     <!-- Leaflet: mapa interactivo -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -58,11 +59,16 @@
                     <span>Ver mapa</span>
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="mascotas-perdidas.html" class="nav-link">
                     <span class="nav-icon" aria-hidden="true">🐾</span>
                     <span>Mascotas perdidas</span>
                 </a>
 
+                <a href="chats.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">💬</span>
+                    <span>Mensajes</span>
+                    <span id="contadorMensajes" class="contador-mensajes" hidden>0</span>
+                </a>
 
                 <a href="notificaciones.html" class="nav-link" data-requiere-sesion>
                     <span class="nav-icon" aria-hidden="true">🔔</span>
@@ -158,7 +164,17 @@
             <!-- LISTADO DE REPORTES -->
             <section class="content-card listado-mapa">
 
-                <h2>Reportes en el mapa</h2>
+                <h2 id="tituloListadoMapa">Reportes en el mapa</h2>
+
+                <div class="pestanas-mapa" role="group" aria-label="Tipo de publicaciones">
+                    <button type="button" id="btnPestanaReportes" class="pestana-mapa activa" aria-pressed="true">
+                        🏙️ Incidencias urbanas
+                    </button>
+
+                    <button type="button" id="btnPestanaMascotas" class="pestana-mapa" aria-pressed="false">
+                        🐾 Mascotas perdidas
+                    </button>
+                </div>
 
                 <div id="listaReportesMapa" aria-live="polite">
                     <p class="empty-message">
@@ -167,6 +183,7 @@
                 </div>
 
             </section>
+
 
         </main>
 

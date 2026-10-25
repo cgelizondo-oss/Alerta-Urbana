@@ -207,11 +207,11 @@ router.post("/", verificarToken, upload.single("imagen"), async (req, res) => {
             });
         }
 
-        if (ubicacion.trim().length > 150) {
+        if (ubicacion.trim().length > 250) {
             eliminarImagenSubida(req.file);
 
             return res.status(400).json({
-                mensaje: "La ubicación no puede superar los 150 caracteres"
+                mensaje: "La ubicación no puede superar los 250 caracteres"
             });
         }
 
@@ -1132,4 +1132,3 @@ router.get("/:id/estado-aviso", verificarToken, async (req, res) => {
 
 module.exports = router;
 module.exports.revisarReportesInactivos = revisarReportesInactivos;
-

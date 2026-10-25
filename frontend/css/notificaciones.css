@@ -91,26 +91,28 @@
     cursor: not-allowed;
 }
 
-/* CONTADOR DEL MENÚ */
-
-.contador-notificaciones {
+/* CONTADOR DE MENSAJES SIN LEER */
+.contador-mensajes {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-width: 22px;
     height: 22px;
-    padding: 0 5px;
+    padding: 0 6px;
     margin-left: auto;
-    border-radius: 999px;
+    border-radius: 50px;
     background-color: #dc2626;
-    color: #fff;
+    color: #ffffff;
     font-size: 12px;
     font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 2px 5px rgba(220, 38, 38, 0.25);
 }
 
-.contador-notificaciones[hidden] {
+.contador-mensajes[hidden] {
     display: none;
 }
+
 
 /* MENSAJES */
 

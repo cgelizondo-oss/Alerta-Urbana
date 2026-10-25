@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="css/inicio.css">
     <link rel="stylesheet" href="css/mis-reportes.css">
+    <link rel="stylesheet" href="css/notificaciones.css">
 
     <script src="js/mis-reportes.js" defer></script>
 </head>
@@ -53,9 +54,15 @@
                     <span>Ver mapa</span>
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="mascotas-perdidas.html" class="nav-link">
                     <span class="nav-icon" aria-hidden="true">🐾</span>
                     <span>Mascotas perdidas</span>
+                </a>
+
+                <a href="chats.html" class="nav-link" data-requiere-sesion>
+                    <span class="nav-icon" aria-hidden="true">💬</span>
+                    <span>Mensajes</span>
+                    <span id="contadorMensajes" class="contador-mensajes" hidden>0</span>
                 </a>
 
                 <a href="notificaciones.html" class="nav-link" data-requiere-sesion>
